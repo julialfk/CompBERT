@@ -28,7 +28,7 @@ list[loc] getFiles(loc projectLocation) {
 // 
 int main(loc projectLocation) {
     list[loc] fileLocations = getFiles(projectLocation);
-    list[map[str, value]] methods = [];
+    map[loc, map[str, list[map[str, value]]]] methods = ();
 
     for(file <- fileLocations) {
         methods += getMethods(file);
