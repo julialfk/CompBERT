@@ -28,10 +28,10 @@ list[loc] getFiles(loc projectLocation) {
 // 
 int main(loc projectLocation) {
     list[loc] fileLocations = getFiles(projectLocation);
-    list[map[str, value]] methods = [];
+    map[str, map[str, list[map[str, value]]]] methods = ();
 
     for(file <- fileLocations) {
-        methods += getMethods(file);
+        methods += getMethods(file, (), ());
     }
 
     writeJSON(|project://preprocess/output/iTrust.json|, methods);
