@@ -23,6 +23,8 @@ def pull_diff(args):
     if r.status_code != 200:
         raise Exception("Commit not found. Are the arguments correct?")
     r_json = r.json()
+    with (output_dir.joinpath("commit.json")).open("w") as f:
+        f.write(r.text)
 
     files_json = r_json["files"]
 
@@ -30,42 +32,57 @@ def pull_diff(args):
     if len(parents) > 0:
         parent_ids = [parent["sha"] for parent in parents]
 
-    files_data = {}
+    files_data = dict()
     for file in files_json:
         file_status = file["status"]
         file_name = file["filename"]
+        file_patch = file["patch"]
 
         # Only search modified java files
         is_java = re.search(r"\.(java|jav)", file_name)
         if ((file_status != "modified") and (file_status != "added")) or (is_java == None):
             continue
 
+        # Find all shown lines in file patch
+        diffs = re.findall(r"@@ -[0-9]+,[0-9]+ \+[0-9]+,[0-9]+ @@", file_patch)
+        diff_before = []
+        diff_after = []
+        for diff_str in diffs:
+            diff = re.split(r" |,", diff_str[3:-3])
+            diff_start_before = int(diff[0][1:])
+            diff_end_before = diff_start_before + int(diff[1]) - 1
+            diff_start_after = int(diff[2][1:])
+            diff_end_after = diff_start_after + int(diff[3]) - 1
+
+            diff_before.append((diff_start_before, diff_end_before))
+            diff_after.append((diff_start_after, diff_end_after))
+
+        files_data[file_name] = {"diff_before": diff_before, "diff_after": diff_after}
+
         # Save new commit file
         raw_url = file["raw_url"]
         new_raw = requests.get(raw_url).text
         file_path = output_dir.joinpath("new", file_name)
         file_path.parent.mkdir(parents=True, exist_ok=True)
-        files_data[file_name] = {"new_raw": str(file_path)}
         with file_path.open("w") as f:
             f.write(new_raw)
 
         # Get files from the parents
         if file_status == "modified":
-            old_raw_urls = [re.sub(file["sha"], parent_id, raw_url) for parent_id in parent_ids]
-            old_raws = []
+            old_raw_urls = [raw_url.replace(r_json["sha"], parent_id) for parent_id in parent_ids]
 
             for index, url in enumerate(old_raw_urls):
                 old_r = requests.get(url)
                 if old_r.status_code == 200:
                     file_path = output_dir.joinpath(f"old{index}", file_name)
                     file_path.parent.mkdir(parents=True, exist_ok=True)
-                    old_raws.append(str(file_path))
+                    # old_raws.append(str(file_path))
                     with file_path.open("w") as f:
                         f.write(old_r.text)
 
-            files_data[file_name]["old_raws"] = old_raws
+            # files_data[file_name]["old_raws"] = old_raws
 
-    # Save file paths
+    # Save the diff lines as a json in the commit directory
     json_dir = output_dir.joinpath("file_data.json")
     with json_dir.open("w") as f:
         f.write(json.dumps(files_data))
