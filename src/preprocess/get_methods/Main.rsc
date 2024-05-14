@@ -4,37 +4,41 @@ import IO;
 import lang::java::m3::Core;
 import lang::java::m3::AST;
 import lang::json::IO;
+import util::FileSystem;
 import List;
-// import Set;
-// import String;
+import Type;
 import Extract;
 
 // Run the analysis over multiple Java programs.
-int mainList(list[loc] projectlocations) {
-    for(project <- projectlocations) {
-        main(project);
-    }
+// int mainList(list[loc] projectlocations) {
+//     for (project <- projectlocations) {
+//         main(project);
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
 // Create a list of all file locations in the project.
-list[loc] getFiles(loc projectLocation) {
-    M3 model = createM3FromMavenProject(projectLocation);
-    list[loc] fileLocations = [f | f <- files(model.containment), isCompilationUnit(f)];
-    return fileLocations;
-}
+// set[loc] getFiles(loc projectLocation) {
+//     // M3 model = createM3FromDirectory(projectLocation);
+//     set[loc] fileLocations = files(projectLocation);
+//     return fileLocations;
+// }
 
 // 
-int main(loc projectLocation) {
-    list[loc] fileLocations = getFiles(projectLocation);
-    map[str, map[str, list[map[str, value]]]] methods = ();
+int main(loc projectLocation, loc issuesLocation) {
+    map[str, map[str, value]] issues = readJSON(#map[str, map[str, value]], issuesLocation);
 
-    for(file <- fileLocations) {
-        methods += getMethods(file, (), ());
+    for (issue <- issues) {
+        iprintln(issue);
+        map[str, map[str, map[str, list[map[str, value]]]]] methods = ();
+        for (commit <- typeCast(#list[str], issues[issue]["commits"])) {
+            methods[commit] = getChangedMethods(projectLocation + commit);
+        }
+        issues[issue]["commits"] = methods;
     }
 
-    writeJSON(|project://preprocess/output/iTrust.json|, methods);
+    writeJSON(issuesLocation, issues);
 
     return 0;
 }
