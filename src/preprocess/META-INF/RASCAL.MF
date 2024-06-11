@@ -1,4 +1,4 @@
 Manifest-Version: 0.0.1
 Project-Name: preprocess
-Source: get_methods
+Source: rascal
 Require-Libraries: 
