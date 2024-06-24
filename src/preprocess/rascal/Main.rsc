@@ -11,17 +11,16 @@ import Map;
 import Type;
 import Extract;
 
-// Run the analysis over multiple Java programs.
-// int mainList(list[loc] projectlocations) {
-//     for (project <- projectlocations) {
-//         main(project);
-//     }
 
-//     return 0;
-// }
-
-// 
+/**
+ * Main function to analyze commits and methods for issues in a project.
+ *
+ * @param projectLocation The location of the project directory.
+ * @param issuesLocation The location of the issues JSON file.
+ * @return An integer status code (0 for success).
+ */
 int main(loc projectLocation, loc issuesLocation) {
+    // Read the issues data from the JSON file
     map[str, map[str, value]] issues = readJSON(#map[str, map[str, value]], issuesLocation);
 
     set[str] commits = {};
@@ -30,10 +29,8 @@ int main(loc projectLocation, loc issuesLocation) {
     for (issue <- issues) {
         iprintln(issue);
 
-        // If any of the patches is also found in a parent commit,
-        // it should be excluded as an old_code entry,
-        // since it cannot be used as a negative training example
-        list[node] nodesNew = [];
+        // Variables to track nodes and methods
+        list[node] nodesNewAll = [];
         list[map[str, value]] methodsOldAll = [];
         map[str, map[str, map[str, list[map[str, value]]]]] methods = ();
         for (commit <- typeCast(#list[str], issues[issue]["commits"])) {
@@ -44,34 +41,36 @@ int main(loc projectLocation, loc issuesLocation) {
 
             list[map[str, value]] methodsNew = [];
             list[map[str, value]] methodsOld = [];
+            // Base information to be added to each method's info
             map[str, value] baseInfo = ("issue":issue,
                                         "commit":commit,
                                         "summary":issues[issue]["summary"],
-                                        "description":issues[issue]["description"]);
+                                        "description":issues[issue]["description"],
+                                        "nl_input":issues[issue]["nl_input"]);
+            // Get changed methods for the commit
             <nodesNew, methodsNew, methodsOld> =
                 getChangedMethods(projectLocation + commit,
-                                    nodesNew,
-                                    methodsOld,
                                     baseInfo);
+            nodesNewAll += nodesNew;
             entries += methodsNew;
             methodsOldAll += methodsOld;
         }
-        issues[issue]["positives"] = size(nodesNew);
+        issues[issue]["positives"] = size(nodesNewAll);
 
         // Only add an unchanged method as an entry if they have not been marked as
         // changed in a previous commit for the same issue
         int nNegatives = 0;
-        iprintln("#Methods to double check:" + toString(size(methodsOldAll)));
+        iprintln("#Methods to double check: " + toString(size(methodsOldAll)));
         for (method <- methodsOldAll) {
-            if (!any(n <- nodesNew, n:= method["node"])) {
+            if (!any(n <- nodesNewAll, n := method["node"])) {
                 entries += delete(method, "node");
                 nNegatives += 1;
-            } // Add check to ensure negs only appear once in set by also matching
-            // to set of nodes that grows when neg is added (node of neg is added after neg is written)
+            }
         }
         issues[issue]["negatives"] = nNegatives;
     }
 
+    // Write the entries and issues data to JSON files
     writeJSON(projectLocation + "data.json", entries);
     writeJSON(issuesLocation, issues);
     writeJSON(projectLocation + "duplicate_commits.json", dupeCommits);

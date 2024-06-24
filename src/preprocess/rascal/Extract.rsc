@@ -11,191 +11,242 @@ import Map;
 import Set;
 import String;
 import Type;
+import Exception;
 
-// Create a list of all method locations in the file.
-public map[str, map[str, list[map[str, value]]]]
-getMethodsOld(loc fileLocation, map[str, map[str, list[map[str, value]]]] methods) {
+
+/**
+ * Create a list of all methods and their information in the old version of a file.
+ *
+ * @param fileLocation The location of the file to analyze.
+ * @param methodsMap A map containing existing methods information.
+ * @param baseInfo A map of base information to be added to each method's info.
+ * @return A tuple containing an updated methods map and a list of method information maps.
+ */
+public tuple[map[str, map[str, list[map[str, value]]]], list[map[str, value]]]
+getMethodsOld(loc fileLocation,
+                map[str, map[str, list[map[str, value]]]] methodsMap,
+                map[str, value] baseInfo) {
     str fileLocStr = fileLocation.path;
     // Remove the commit specific folders from path
-    fileLocStr = visit (fileLocStr) { case /^\/[a-z0-9]+\/(new|old[0-9]+)\// => "" }
-    if (fileLocStr notin methods) { methods += (fileLocStr:()); }
-    // map[str, map[str, list[map[str, value]]]] methods = (fileLocStr:());
+    fileLocStr = visit (fileLocStr) { case /^(\/.+)*\/[a-z0-9]+\/old\// => "" }
+    if (fileLocStr notin methodsMap) { methodsMap += (fileLocStr:()); }
 
     list[str] fileLines = readFileLines(fileLocation);
 
+    list[map[str, value]] methods  = [];
     Declaration ast = createAstFromFile(fileLocation, true);
     visit(ast) {
         case n:\method(_,name,_,_,_): {
             codeStr = flattenCode(fileLines, n.src);
-            map[str, value] methodInfo = ("start_line":n.src.begin.line,
+            map[str, value] methodInfo = ("path":fileLocStr,
+                                            "method_name":name,
+                                            "start_line":n.src.begin.line,
                                             "end_line":n.src.end.line,
                                             "code":codeStr,
-                                            "node":n);
+                                            "parent":true,
+                                            "changed":false,
+                                            "node":n)
+                                         + baseInfo;
 
-            if (name in methods[fileLocStr]) { methods[fileLocStr][name] += methodInfo; }
-            else { methods[fileLocStr] += (name:[methodInfo]); }
+            if (name in methodsMap[fileLocStr]) { methodsMap[fileLocStr][name] += methodInfo; }
+            else { methodsMap[fileLocStr] += (name:[methodInfo]); }
+            methods += methodInfo;
         }
     }
 
-    return methods;
+    return <methodsMap, methods>;
 }
 
-// Create a list of all method locations in the file.
-tuple[list[node], list[map[str, value]], list[map[str, value]]]
+
+/**
+ * Create a list of all methods and their information in the new version of a file.
+ *
+ * @param fileLocation The location of the file to analyze.
+ * @param methodsOldMap A map containing methods information from the old commit.
+ * @param diffLines A map containing the diff lines information.
+ * @param baseInfo A map of base information to be added to each method's info.
+ * @return A tuple containing a list of new method nodes and a list of new method information maps.
+ */
+tuple[list[node], list[map[str, value]]]
 getMethodsNew(loc fileLocation,
-                list[node] nodesNew,
                 map[str, map[str, list[map[str, value]]]] methodsOldMap,
                 map[str, map[str, value]] diffLines,
                 map[str, value] baseInfo) {
     str fileLocStr = fileLocation.path;
     // Remove the commit specific folders from path
-    fileLocStr = visit (fileLocStr) { case /^\/[a-z0-9]+\/(new|old[0-9]+)\// => "" }
+    fileLocStr = visit (fileLocStr) { case /^(\/.+)*\/[a-z0-9]+\/new\// => "" }
 
     list[str] fileLines = readFileLines(fileLocation);
 
+    list[node] nodesNew = [];
     list[map[str, value]] methodsNew = [];
-    list[map[str, value]] methodsOld = [];
     Declaration ast = createAstFromFile(fileLocation, true);
     visit(ast) {
         case n:\method(_,name,_,_,_): {
             codeStr = flattenCode(fileLines, n.src);
-            map[str, value] methodInfo = ("start_line":n.src.begin.line,
+            map[str, value] methodInfo = ("path":fileLocStr,
+                                            "method_name":name,
+                                            "start_line":n.src.begin.line,
                                             "end_line":n.src.end.line,
                                             "code":codeStr,
+                                            "parent":false,
+                                            "changed":true,
                                             "node":n)
-                                            + baseInfo;
-
-            bool methodAdded = false;
-            map[str, value] unchangedMethod = ();
+                                         + baseInfo;
 
             // compare the new method with the old commits.
             // If they are different, the method has been changed.
-            <methodAdded, changedMethod, unchangedMethod> = writeMethod(name, methodInfo, methodsOldMap, diffLines, fileLocStr);
-
-            if (methodAdded) { nodesNew += n; }
-            if (unchangedMethod != ()) { methodsOld += unchangedMethod; }
-            methodsNew += changedMethod;
+            map[str, value] newMethod = writeMethod(methodInfo, methodsOldMap, diffLines, fileLocStr);
+            if (newMethod != ()) {
+                nodesNew += n;
+                methodsNew += newMethod;
+            }
         }
     }
 
-    return <nodesNew, methodsNew, methodsOld>;
+    return <nodesNew, methodsNew>;
 }
 
-// Convert the method's code into a single string.
+
+/**
+ * Convert the method's code into a single string.
+ *
+ * @param fileLines The lines of the file.
+ * @param methodLocation The location of the method in the file.
+ * @return The method's code as a single string.
+ */
 str flattenCode(list[str] fileLines, loc methodLocation) {
     list[str] methodOriginal =
         fileLines[methodLocation.begin.line-1..methodLocation.end.line];
 
     str method = "";
-    // No need to skip first newline, as the tokenizer will get rid of it.
-    for (line <- methodOriginal) {
-        method = method + "\n" + line;
-    }
+    for (line <- methodOriginal) { method = method + "\n" + line; }
 
-    return method;
+    return method[1..];
 }
 
-// Compare the current method with previous versions to check if changes have been made
-tuple[bool, map[str, value], map[str, value]]
-writeMethod(str methodName,
-            map[str, value] methodInfo,
-            map[str, map[str, list[map[str, value]]]] methodsOldMap,
-            map[str, map[str, value]] diffLines,
-            str fileLocStr) {
-    methodInfo += ("changed":false,
-                    "path":fileLocStr,
-                    "method_name":methodName,
-                    "review":false,
-                    "parent":false);
-    
-    // Marks exceptions in data
-    if (diffLines[fileLocStr]["diff_before"] == "review") {
-        // println("skipped due to review in diff");
-        methodInfo["review"] = true;
-        return <false, delete(methodInfo, "node"), ()>;
-    }
 
-    diffLinesList = typeCast(#map[str, list[list[int]]], diffLines[fileLocStr]);
+/**
+ * Compare the current method with previous versions to check if changes have been made.
+ *
+ * @param methodInfo Information about the current method.
+ * @param methodsOldMap A map containing methods information from the old commit.
+ * @param diffLines A map containing the diff lines information.
+ * @param fileLocStr The file location in string format.
+ * @return A map containing the method information if it has changed, otherwise an empty map.
+ */
+map[str, value] writeMethod(map[str, value] methodInfo,
+                            map[str, map[str, list[map[str, value]]]] methodsOldMap,
+                            map[str, map[str, value]] diffLines,
+                            str fileLocStr) {
+    map[str, value] diffLinesFile = diffLines[fileLocStr];
     // A method is part of the change if it is new and thus cannot be found in the previous commit
     // If a file is added, the patch will show no lines before commit or [0,-1]
-    list[list[int]] diffBefore = diffLinesList["diff_before"];
-    if (fileLocStr notin methodsOldMap || methodName notin methodsOldMap[fileLocStr]) {
+    str oldFileName = typeCast(#str, diffLinesFile["old_file"]);
+    str methodName = typeCast(#str, methodInfo["method_name"]);
+    if (oldFileName notin methodsOldMap || methodName notin methodsOldMap[oldFileName]) {
         methodInfo["changed"] = true;
-        return <true, delete(methodInfo, "node"), ()>;
+        return delete(methodInfo, "node");
     }
 
-    map[str, value] unchangedMethod = methodInfo;
-
-    list[list[int]] diffAfter = diffLinesList["diff_after"];
-    list[tuple[list[int], int]] diffAfterIndexed = zip2(diffAfter, [0..size(diffAfter)]);
-    // Check if method has lines in any of the shown lines window of the patch
-    for (<diff, idx> <- diffAfterIndexed) {
-        if (diffCheck(methodInfo, diff)) {
-            // Compare the new method with previous versions in the respective before diff
-            for (oldInfo <- methodsOldMap[fileLocStr][methodName]) {
-                list[int] diffBefore = diffLinesList["diff_before"][idx];
+    list[list[int]] diffBefore = typeCast(#list[list[int]], diffLinesFile["diff_before"]);
+    list[list[int]] diffAfter = typeCast(#list[list[int]], diffLinesFile["diff_after"]);
+    list[tuple[list[int], list[int]]] diffsZipped = zip2(diffBefore, diffAfter);
+    diffsZipped = [diff | diff <- diffsZipped, diffCheck(methodInfo, diff[1])];
+    list[map[str, value]] oldMethods = methodsOldMap[oldFileName][methodName];
+    for (<diffBeforeRange, _> <- diffsZipped) {
+        for (oldInfo <- oldMethods) {
+            if (diffCheck(oldInfo, diffBeforeRange)) {
+                // One of the methods before commit is found to be the same as
+                // the method after commit, so we cannot use it as a positive example.
                 node oldNode = typeCast(#node, oldInfo["node"]);
-                if ((!(oldNode := methodInfo["node"])) && diffCheck(oldInfo, diffBefore)) {
-                    methodInfo["changed"] = true;
-
-                    // Add negative entry with unchanged code to set
-                    unchangedMethod += ("code":oldInfo["code"],
-                                        "start_line":diffBefore[0],
-                                        "end_line":diffBefore[1],
-                                        "parent":true,
-                                        "changed":false,
-                                        "node":oldNode);
-                    return <true, delete(methodInfo, "node"), unchangedMethod>;
+                if (oldNode := methodInfo["node"]) {
+                    return ();
                 }
+                else { oldMethods -= oldInfo; }
             }
         }
     }
-    // Add negative entry with unchanged code to set and filter entries with nodes that match any of the new_code.
-    return <false, delete(methodInfo, "node"), unchangedMethod>;
-    // Should exclude this method and only add the parent if possible,
-    // bc otherwise you would get both parent and child as neg examples.
-    // Or just always add new node to nodesNew in super function,
-    // so that this method will always be added just once, be it parent or child.
+
+    // None of the old methods were found to be the same, so we can conclude that the new method
+    // is changed in this commit.
+    return delete(methodInfo, "node");
 }
 
+
+/**
+ * Check if the method is within the range of diff lines.
+ *
+ * @param methodInfo Information about the method.
+ * @param diff The range of diff lines.
+ * @return True if the method is within the diff range, otherwise false.
+ */
 bool diffCheck(map[str, value] methodInfo, list[int] diff) {
-    return typeCast(#int, methodInfo["start_line"]) <= diff[1]
-            && typeCast(#int, methodInfo["end_line"]) >= diff[0];
+    // If the window range > 1, then the window includes removed/added lines
+    // and only those should be checked.
+    // Otherwise, the lines directly above and below are used,
+    // as those windows do not contain any lines to check.
+    int startLine = diff[0];
+    int endLine = diff[1];
+    if (endLine - startLine > 1) {
+        startLine += 1;
+        endLine -= 1;
+    }
+    return typeCast(#int, methodInfo["start_line"]) <= endLine
+            && typeCast(#int, methodInfo["end_line"]) >= startLine;
 }
 
-// Create a map containing all changed files from a commit and find which functions
-// have been changed
+
+/**
+ * Create a list containing all methods changed in a commit.
+ *
+ * @param commitLocation The location of the commit to analyze.
+ * @param baseInfo A map of base information to be added to each method's info.
+ * @return A tuple containing a list of new method nodes, a list of new method information maps, and a list of old method information maps.
+ */
 tuple[list[node], list[map[str, value]], list[map[str, value]]]
 getChangedMethods(loc commitLocation,
-                    list[node] nodesNew,
-                    list[map[str, value]] methodsOld,
                     map[str, value] baseInfo) {
     set[loc] fileLocationsNew = files(commitLocation + "new");
-    if (fileLocationsNew == {}) { return <nodesNew, [], []>; }
+    if (fileLocationsNew == {}) { return <[], [], []>; }
     set[loc] fileLocationsOld = files(commitLocation) - fileLocationsNew;
 
     // Read the patch lines from the commit's json
-    loc diffLinesLoc = commitLocation + "diff_lines.json";
-    map[str, map[str, value]] diffLines =
-        readJSON(#map[str, map[str, value]], diffLinesLoc);
-    if (diffLines == ()) { return <nodesNew, [], []>; }
+    value readDiffLines(loc l) {
+        try return readJSON(#str, l);
+        catch Java("IllegalStateException",
+                    "Expected a string but was BEGIN_OBJECT at line 1 column 2 path $"): {
+            return readJSON(#map[str, map[str, value]], l);
+        }
+    }
+    diffLinesCheck = readDiffLines(commitLocation + "diff_lines.json");
+    if (typeOf(diffLinesCheck) == \str() || diffLinesCheck == ()) { return <[], [], []>; }
+    map[str, map[str, value]] diffLines = typeCast(#map[str, map[str, value]], diffLinesCheck);
 
+    map[str, str] fileLocsPaired = (typeCast(#str, diffLines[newFile]["old_file"]) : newFile
+                                    | newFile <- diffLines,
+                                      diffLines[newFile]["old_file"] != "/dev/null");
+
+    // map[str, map[str, value]] diffLines = typeCast(#map[str, map[str, value]], diffLinesCheck);
     map[str, map[str, list[map[str, value]]]] methodsOldMap = ();
-    for (file <- fileLocationsOld) { methodsOldMap = getMethodsOld(file, methodsOldMap); }
-
-    list[map[str, value]] methodsNewAll = [];
     list[map[str, value]] methodsOldAll = [];
-    list[map[str, value]] methodsNew = [];
-    for (file <- fileLocationsNew) {
-        <nodesNew, methodsNew, methodsOld> =
-            getMethodsNew(file,
-                            nodesNew,
-                            methodsOldMap,
-                            diffLines,
-                            baseInfo);
-        methodsNewAll += methodsNew;
+    for (file <- fileLocationsOld) {
+        <methodsOldMap, methodsOld> = getMethodsOld(file,
+                                                    methodsOldMap,
+                                                    baseInfo);
         methodsOldAll += methodsOld;
     }
 
-    return <nodesNew, methodsNewAll, methodsOldAll>;
+    list[map[str, value]] methodsNewAll = [];
+    list[node] nodesNewAll = [];
+    for (file <- fileLocationsNew) {
+        <nodesNew, methodsNew> = getMethodsNew(file,
+                                                methodsOldMap,
+                                                diffLines,
+                                                baseInfo);
+        nodesNewAll += nodesNew;
+        methodsNewAll += methodsNew;
+    }
+
+    return <nodesNewAll, methodsNewAll, methodsOldAll>;
 }
