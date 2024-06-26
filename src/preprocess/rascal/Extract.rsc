@@ -65,9 +65,9 @@ getMethodsOld(loc fileLocation,
  * @param methodsOldMap A map containing methods information from the old commit.
  * @param diffLines A map containing the diff lines information.
  * @param baseInfo A map of base information to be added to each method's info.
- * @return A tuple containing a list of new method nodes and a list of new method information maps.
+ * @return A tuple containing a list of new method information maps.
  */
-tuple[list[node], list[map[str, value]]]
+list[map[str, value]]
 getMethodsNew(loc fileLocation,
                 map[str, map[str, list[map[str, value]]]] methodsOldMap,
                 map[str, map[str, value]] diffLines,
@@ -78,7 +78,7 @@ getMethodsNew(loc fileLocation,
 
     list[str] fileLines = readFileLines(fileLocation);
 
-    list[node] nodesNew = [];
+    // list[node] nodesNew = [];
     list[map[str, value]] methodsNew = [];
     Declaration ast = createAstFromFile(fileLocation, true);
     visit(ast) {
@@ -98,13 +98,13 @@ getMethodsNew(loc fileLocation,
             // If they are different, the method has been changed.
             map[str, value] newMethod = writeMethod(methodInfo, methodsOldMap, diffLines, fileLocStr);
             if (newMethod != ()) {
-                nodesNew += n;
+                // nodesNew += n;
                 methodsNew += newMethod;
             }
         }
     }
 
-    return <nodesNew, methodsNew>;
+    return methodsNew;
 }
 
 
@@ -146,7 +146,7 @@ map[str, value] writeMethod(map[str, value] methodInfo,
     str methodName = typeCast(#str, methodInfo["method_name"]);
     if (oldFileName notin methodsOldMap || methodName notin methodsOldMap[oldFileName]) {
         methodInfo["changed"] = true;
-        return delete(methodInfo, "node");
+        return methodInfo;
     }
 
     list[list[int]] diffBefore = typeCast(#list[list[int]], diffLinesFile["diff_before"]);
@@ -160,9 +160,7 @@ map[str, value] writeMethod(map[str, value] methodInfo,
                 // One of the methods before commit is found to be the same as
                 // the method after commit, so we cannot use it as a positive example.
                 node oldNode = typeCast(#node, oldInfo["node"]);
-                if (oldNode := methodInfo["node"]) {
-                    return ();
-                }
+                if (oldNode := methodInfo["node"]) { return (); }
                 else { oldMethods -= oldInfo; }
             }
         }
@@ -170,7 +168,7 @@ map[str, value] writeMethod(map[str, value] methodInfo,
 
     // None of the old methods were found to be the same, so we can conclude that the new method
     // is changed in this commit.
-    return delete(methodInfo, "node");
+    return methodInfo;
 }
 
 
@@ -202,13 +200,13 @@ bool diffCheck(map[str, value] methodInfo, list[int] diff) {
  *
  * @param commitLocation The location of the commit to analyze.
  * @param baseInfo A map of base information to be added to each method's info.
- * @return A tuple containing a list of new method nodes, a list of new method information maps, and a list of old method information maps.
+ * @return A tuple containing a list of new method information maps, and a list of old method information maps.
  */
-tuple[list[node], list[map[str, value]], list[map[str, value]]]
+tuple[list[map[str, value]], list[map[str, value]]]
 getChangedMethods(loc commitLocation,
                     map[str, value] baseInfo) {
     set[loc] fileLocationsNew = files(commitLocation + "new");
-    if (fileLocationsNew == {}) { return <[], [], []>; }
+    if (fileLocationsNew == {}) { return <[], []>; }
     set[loc] fileLocationsOld = files(commitLocation) - fileLocationsNew;
 
     // Read the patch lines from the commit's json
@@ -220,7 +218,7 @@ getChangedMethods(loc commitLocation,
         }
     }
     diffLinesCheck = readDiffLines(commitLocation + "diff_lines.json");
-    if (typeOf(diffLinesCheck) == \str() || diffLinesCheck == ()) { return <[], [], []>; }
+    if (typeOf(diffLinesCheck) == \str() || diffLinesCheck == ()) { return <[], []>; }
     map[str, map[str, value]] diffLines = typeCast(#map[str, map[str, value]], diffLinesCheck);
 
     map[str, str] fileLocsPaired = (typeCast(#str, diffLines[newFile]["old_file"]) : newFile
@@ -238,15 +236,15 @@ getChangedMethods(loc commitLocation,
     }
 
     list[map[str, value]] methodsNewAll = [];
-    list[node] nodesNewAll = [];
+    // list[node] nodesNewAll = [];
     for (file <- fileLocationsNew) {
-        <nodesNew, methodsNew> = getMethodsNew(file,
-                                                methodsOldMap,
-                                                diffLines,
-                                                baseInfo);
-        nodesNewAll += nodesNew;
+        methodsNew = getMethodsNew(file,
+                                    methodsOldMap,
+                                    diffLines,
+                                    baseInfo);
+        // nodesNewAll += nodesNew;
         methodsNewAll += methodsNew;
     }
 
-    return <nodesNewAll, methodsNewAll, methodsOldAll>;
+    return <methodsNewAll, methodsOldAll>;
 }

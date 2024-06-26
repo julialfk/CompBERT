@@ -12,6 +12,20 @@ import Type;
 import Extract;
 
 
+map[str, list[node]] updateNodes(map[str, value] method, map[str, list[node]] methodNodes) {
+    methodName = typeCast(#str, method["method_name"]);
+    methodNode = method["node"];
+
+    if (methodName in methodNodes) {
+        if (any(n <- methodNodes[methodName], n := methodNode)) { return (); }
+        methodNodes[methodName] += methodNode;
+    }
+    else { methodNodes += (methodName:[methodNode]); }
+
+    return methodNodes;
+}
+
+
 /**
  * Main function to analyze commits and methods for issues in a project.
  *
@@ -26,11 +40,13 @@ int main(loc projectLocation, loc issuesLocation) {
     set[str] commits = {};
     set[str] dupeCommits = {};
     list[map[str, value]] entries = [];
-    for (issue <- issues) {
+    int i = 0;
+    for (str issue <- issues) {
+        if (i % 10 == 0) { println("i = <i>"); }
         iprintln(issue);
 
         // Variables to track nodes and methods
-        list[node] nodesNewAll = [];
+        list[map[str, value]] methodsNewAll = [];
         list[map[str, value]] methodsOldAll = [];
         map[str, map[str, map[str, list[map[str, value]]]]] methods = ();
         for (commit <- typeCast(#list[str], issues[issue]["commits"])) {
@@ -48,26 +64,42 @@ int main(loc projectLocation, loc issuesLocation) {
                                         "description":issues[issue]["description"],
                                         "nl_input":issues[issue]["nl_input"]);
             // Get changed methods for the commit
-            <nodesNew, methodsNew, methodsOld> =
+            <methodsNew, methodsOld> =
                 getChangedMethods(projectLocation + commit,
                                     baseInfo);
-            nodesNewAll += nodesNew;
-            entries += methodsNew;
+            // nodesNewAll += nodesNew;
+            methodsNewAll += methodsNew;
             methodsOldAll += methodsOld;
         }
-        issues[issue]["positives"] = size(nodesNewAll);
+
+        map[str, list[node]] nodesNew = ();
+        for (method <- methodsNewAll) {
+            update = updateNodes(method, nodesNew);
+            if (update != ()) {
+                nodesNew = update;
+                entries += delete(method, "node");
+            }
+        }
+        issues[issue]["positives"] = size(entries);
 
         // Only add an unchanged method as an entry if they have not been marked as
         // changed in a previous commit for the same issue
+        map[str, list[node]] nodesOld = ();
         int nNegatives = 0;
         iprintln("#Methods to double check: " + toString(size(methodsOldAll)));
         for (method <- methodsOldAll) {
-            if (!any(n <- nodesNewAll, n := method["node"])) {
+            update = updateNodes(method, nodesOld);
+            if (update == ()) { continue; }
+            else { nodesOld = update; }
+
+            methodName = typeCast(#str, method["method_name"]);
+            oldNode = typeCast(#node, method["node"]);
+            if (methodName in nodesNew && !any(n <- nodesNew[methodName], n := oldNode)) {
                 entries += delete(method, "node");
-                nNegatives += 1;
             }
         }
-        issues[issue]["negatives"] = nNegatives;
+        issues[issue]["negatives"] = size(entries) - typeCast(#int, issues[issue]["positives"]);
+        i += 1;
     }
 
     // Write the entries and issues data to JSON files
