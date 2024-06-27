@@ -10,6 +10,7 @@ import List;
 import Map;
 import Type;
 import Extract;
+import Compare;
 
 
 map[str, list[node]] updateNodes(map[str, value] method, map[str, list[node]] methodNodes) {
@@ -17,7 +18,7 @@ map[str, list[node]] updateNodes(map[str, value] method, map[str, list[node]] me
     methodNode = method["node"];
 
     if (methodName in methodNodes) {
-        if (any(n <- methodNodes[methodName], n := methodNode)) { return (); }
+        if (any(n <- methodNodes[methodName], areSimilar(n, methodNode))) { return (); }
         methodNodes[methodName] += methodNode;
     }
     else { methodNodes += (methodName:[methodNode]); }
@@ -37,17 +38,24 @@ int main(loc projectLocation, loc issuesLocation) {
     // Read the issues data from the JSON file
     map[str, map[str, value]] issues = readJSON(#map[str, map[str, value]], issuesLocation);
 
+    loc dataLocation = projectLocation + "data.json";
+    writeJSON(dataLocation, []);
+    loc methodsOldLoc = projectLocation + "methodsOld_tmp.json";
+    loc methodsNewLoc = projectLocation + "methodsNew_tmp.json";
+
     set[str] commits = {};
     set[str] dupeCommits = {};
-    list[map[str, value]] entries = [];
+
     int i = 0;
+    println("Total #issues: <size(issues)>");
     for (str issue <- issues) {
+        list[map[str, value]] entries = [];
+        writeJSON(methodsOldLoc, []);
+        writeJSON(methodsNewLoc, []);
         if (i % 10 == 0) { println("i = <i>"); }
         iprintln(issue);
 
         // Variables to track nodes and methods
-        list[map[str, value]] methodsNewAll = [];
-        list[map[str, value]] methodsOldAll = [];
         map[str, map[str, map[str, list[map[str, value]]]]] methods = ();
         for (commit <- typeCast(#list[str], issues[issue]["commits"])) {
             if (!exists(projectLocation + commit)) { continue; }
@@ -65,13 +73,18 @@ int main(loc projectLocation, loc issuesLocation) {
                                         "nl_input":issues[issue]["nl_input"]);
             // Get changed methods for the commit
             <methodsNew, methodsOld> =
-                getChangedMethods(projectLocation + commit,
-                                    baseInfo);
-            // nodesNewAll += nodesNew;
-            methodsNewAll += methodsNew;
-            methodsOldAll += methodsOld;
+                getChangedMethods(projectLocation + commit, baseInfo);
+
+            list[map[str, value]] methodsOldAll = readJSON(#list[map[str, value]], methodsOldLoc);
+            list[map[str, value]] methodsNewAll = readJSON(#list[map[str, value]], methodsNewLoc);
+            writeJSON(methodsOldLoc, methodsOldAll + methodsOld);
+            writeJSON(methodsNewLoc, methodsNewAll + methodsNew);
         }
 
+        list[map[str, value]] methodsOldAll = readJSON(#list[map[str, value]], methodsOldLoc);
+        list[map[str, value]] methodsNewAll = readJSON(#list[map[str, value]], methodsNewLoc);
+
+        // Prevent duplicate new method entries
         map[str, list[node]] nodesNew = ();
         for (method <- methodsNewAll) {
             update = updateNodes(method, nodesNew);
@@ -94,16 +107,18 @@ int main(loc projectLocation, loc issuesLocation) {
 
             methodName = typeCast(#str, method["method_name"]);
             oldNode = typeCast(#node, method["node"]);
-            if (methodName in nodesNew && !any(n <- nodesNew[methodName], n := oldNode)) {
+            if (methodName notin nodesNew || !any(n <- nodesNew[methodName], areSimilar(n, oldNode))) {
                 entries += delete(method, "node");
             }
         }
         issues[issue]["negatives"] = size(entries) - typeCast(#int, issues[issue]["positives"]);
+
         i += 1;
+        entriesOld = readJSON(#list[map[str, value]], dataLocation);
+        writeJSON(dataLocation, entriesOld + entries);
     }
 
     // Write the entries and issues data to JSON files
-    writeJSON(projectLocation + "data.json", entries);
     writeJSON(issuesLocation, issues);
     writeJSON(projectLocation + "duplicate_commits.json", dupeCommits);
 

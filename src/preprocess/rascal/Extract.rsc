@@ -12,6 +12,7 @@ import Set;
 import String;
 import Type;
 import Exception;
+import Compare;
 
 
 /**
@@ -78,7 +79,6 @@ getMethodsNew(loc fileLocation,
 
     list[str] fileLines = readFileLines(fileLocation);
 
-    // list[node] nodesNew = [];
     list[map[str, value]] methodsNew = [];
     Declaration ast = createAstFromFile(fileLocation, true);
     visit(ast) {
@@ -98,7 +98,6 @@ getMethodsNew(loc fileLocation,
             // If they are different, the method has been changed.
             map[str, value] newMethod = writeMethod(methodInfo, methodsOldMap, diffLines, fileLocStr);
             if (newMethod != ()) {
-                // nodesNew += n;
                 methodsNew += newMethod;
             }
         }
@@ -144,8 +143,8 @@ map[str, value] writeMethod(map[str, value] methodInfo,
     // If a file is added, the patch will show no lines before commit or [0,-1]
     str oldFileName = typeCast(#str, diffLinesFile["old_file"]);
     str methodName = typeCast(#str, methodInfo["method_name"]);
+
     if (oldFileName notin methodsOldMap || methodName notin methodsOldMap[oldFileName]) {
-        methodInfo["changed"] = true;
         return methodInfo;
     }
 
@@ -153,6 +152,7 @@ map[str, value] writeMethod(map[str, value] methodInfo,
     list[list[int]] diffAfter = typeCast(#list[list[int]], diffLinesFile["diff_after"]);
     list[tuple[list[int], list[int]]] diffsZipped = zip2(diffBefore, diffAfter);
     diffsZipped = [diff | diff <- diffsZipped, diffCheck(methodInfo, diff[1])];
+    if (diffsZipped == []) { return (); }
     list[map[str, value]] oldMethods = methodsOldMap[oldFileName][methodName];
     for (<diffBeforeRange, _> <- diffsZipped) {
         for (oldInfo <- oldMethods) {
@@ -160,7 +160,7 @@ map[str, value] writeMethod(map[str, value] methodInfo,
                 // One of the methods before commit is found to be the same as
                 // the method after commit, so we cannot use it as a positive example.
                 node oldNode = typeCast(#node, oldInfo["node"]);
-                if (oldNode := methodInfo["node"]) { return (); }
+                if (areSimilar(oldNode, methodInfo["node"])) { return (); }
                 else { oldMethods -= oldInfo; }
             }
         }
@@ -203,8 +203,7 @@ bool diffCheck(map[str, value] methodInfo, list[int] diff) {
  * @return A tuple containing a list of new method information maps, and a list of old method information maps.
  */
 tuple[list[map[str, value]], list[map[str, value]]]
-getChangedMethods(loc commitLocation,
-                    map[str, value] baseInfo) {
+getChangedMethods(loc commitLocation, map[str, value] baseInfo) {
     set[loc] fileLocationsNew = files(commitLocation + "new");
     if (fileLocationsNew == {}) { return <[], []>; }
     set[loc] fileLocationsOld = files(commitLocation) - fileLocationsNew;
@@ -225,25 +224,28 @@ getChangedMethods(loc commitLocation,
                                     | newFile <- diffLines,
                                       diffLines[newFile]["old_file"] != "/dev/null");
 
-    // map[str, map[str, value]] diffLines = typeCast(#map[str, map[str, value]], diffLinesCheck);
     map[str, map[str, list[map[str, value]]]] methodsOldMap = ();
     list[map[str, value]] methodsOldAll = [];
+    println("Total files: <size(fileLocationsOld) + size(fileLocationsNew)>");
+    int i = 0;
     for (file <- fileLocationsOld) {
+        if (i%20 == 0) { println("Processing file #<i>"); }
         <methodsOldMap, methodsOld> = getMethodsOld(file,
                                                     methodsOldMap,
                                                     baseInfo);
         methodsOldAll += methodsOld;
+        i += 1;
     }
 
     list[map[str, value]] methodsNewAll = [];
-    // list[node] nodesNewAll = [];
     for (file <- fileLocationsNew) {
+        if (i%20 == 0) { println("Processing file #<i>"); }
         methodsNew = getMethodsNew(file,
                                     methodsOldMap,
                                     diffLines,
                                     baseInfo);
-        // nodesNewAll += nodesNew;
         methodsNewAll += methodsNew;
+        i += 1;
     }
 
     return <methodsNewAll, methodsOldAll>;
