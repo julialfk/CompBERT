@@ -11,6 +11,16 @@ from transformers import RobertaTokenizer
 
 
 def plot_prc(output_dir, predictions, labels):
+    """
+    Plots Precision-Recall Curve (PRC) and saves the figure.
+
+    Args:
+        output_dir (Path): Directory where the PRC plot will be saved.
+        predictions (list or array): Model predictions, probabilities
+                                   between 0 and 1.
+        labels (list or array): True labels (binary) corresponding
+                              to predictions.
+    """
     precision, recall, thresholds = precision_recall_curve(labels, predictions)
     auprc = auc(recall, precision)
     p_pos = np.mean(labels)
@@ -21,7 +31,6 @@ def plot_prc(output_dir, predictions, labels):
     plt.xlabel("Recall")
     plt.ylabel("Precision")
 
-    # Add annotation for AUPRC under the curve
     plt.text(0.1, 0.25, f"Area = {auprc:.2f}", fontsize=11, ha="center")
 
     # No-skill classifier baseline
@@ -76,6 +85,13 @@ def plot_prc(output_dir, predictions, labels):
 
 
 def plot_auprc(root):
+    """
+    Plots the AUPRC (Area Under the Precision-Recall Curve) for
+    different epochs and checkpoints, and saves the figure.
+
+    Args:
+        root (Path): Directory containing JSON files with AUPRC results.
+    """
     files = root.glob("*.json")
     auprcs = []
     labels = []
@@ -104,12 +120,10 @@ def plot_auprc(root):
             checkpoint = match.group(2)
             labels.append(f"{epoch}.{checkpoint}")
 
-    # Plot the AUPRC values
     plt.figure(figsize=(10, 5))
     plt.plot(range(len(auprcs)), auprcs, marker="o", linestyle="-", color="b")
     plt.xlabel("Epoch.Checkpoint")
     plt.ylabel("AUPRC")
-    # plt.title("AUPRC development over epochs and checkpoints")
     plt.xticks(range(len(auprcs)), labels, rotation=45)
 
     plt.savefig(root.joinpath("auprc.png"), dpi=300)
@@ -118,11 +132,15 @@ def plot_auprc(root):
 
 def plot_histogram(output_dir, file_name, predictions, ymax, bins=100):
     """
-    Plots the distribution of confidence scores.
+    Plots a histogram of confidence scores and saves the figure.
 
-    Parameters:
-    - scores (list or array): List of confidence scores ranging from 0 to 1.
-    - bins (int): Number of bins for the histogram. Default is 10.
+    Args:
+        output_dir (Path): Directory where the histogram plot will be saved.
+        file_name (str): Name of the histogram file.
+        predictions (list or array): List of confidence scores ranging
+                                   from 0 to 1.
+        ymax (int): Maximum value for the y-axis.
+        bins (int): Number of bins for the histogram. Default is 100.
     """
     plt.figure(figsize=(10, 5))
     plt.hist(predictions, bins=bins, range=(0, 1),
@@ -143,11 +161,10 @@ def plot_boxplot(output_dir, positives, negatives):
     and calculates the skewness for each.
     Reports quartiles and whisker bounds for both distributions.
 
-    Parameters:
-    - output_dir (Path or str): Directory where the output file will be saved.
-    - file_name (str): Name of the output file.
-    - positives (list or array): List of positive scores ranging from 0 to 1.
-    - negatives (list or array): List of negative scores ranging from 0 to 1.
+    Args:
+        output_dir (Path or str): Directory where the output file will be saved.
+        positives (list or array): List of positive scores ranging from 0 to 1.
+        negatives (list or array): List of negative scores ranging from 0 to 1.
     """
 
     data = [positives, negatives]
@@ -173,6 +190,14 @@ def plot_boxplot(output_dir, positives, negatives):
 
 
 def calculate_boxplot_stats(label, data):
+    """
+    Calculates and prints statistics for a boxplot including mean, quartiles,
+    whisker bounds, and skewness.
+
+    Args:
+        label (str): Label for the data being analyzed.
+        data (list or array): Data to analyze.
+    """
     mean = np.mean(data)
     q1, median, q3 = np.percentile(data, [25, 50, 75])
     lower_whisker = min(data)
@@ -194,8 +219,10 @@ def plot_distribution_percentage(output_dir, predictions):
     Plots a layered bar chart of the distribution of confidence scores
     in a single bar.
 
-    Parameters:
-    - predictions (list or array): List of confidence scores ranging
+    Args:
+        output_dir (Path): Directory where the percentage distribution plot
+                         will be saved.
+        predictions (list or array): List of confidence scores ranging
                                    from 0 to 1.
     """
     bins = np.arange(0, 1.1, 0.1)
@@ -266,6 +293,14 @@ def plot_distribution_percentage(output_dir, predictions):
 
 
 def plot_separate_distributions(output_dir, input_file):
+    """
+    Plots histograms and boxplots of positive and negative predictions.
+
+    Args:
+        output_dir (Path): Directory where the plots will be saved.
+        input_file (dict): Dictionary containing 'labels'
+                         and 'predictions_mult' keys.
+    """
     labeled_predictions = list(
         zip(input_file["labels"], input_file["predictions_mult"])
     )
@@ -284,6 +319,20 @@ def plot_separate_distributions(output_dir, input_file):
 
 
 def sort_results(results_file, data_file):
+    """
+    Sorts results into positive and negative categories, tokenizes the text,
+    and returns the sorted lists.
+
+    Args:
+        results_file (dict): Dictionary containing 'predictions_mult', 'labels',
+                           and 'idxs' keys.
+        data_file (dict): Dictionary with detailed information
+                        for each data entry.
+
+    Returns:
+        positives (list of dict): Sorted list of positive predictions.
+        negatives (list of dict): Sorted list of negative predictions.
+    """
     tokenizer = RobertaTokenizer.from_pretrained("microsoft/unixcoder-base")
     results = zip(
         results_file["predictions_mult"],
@@ -325,13 +374,13 @@ def plot_scatter(output_dir, xvalues, yvalues, xlabel, ylabel, set_name):
     """
     Plot scatter plot with linear regression line and correlation statistics.
 
-    Parameters:
-    - output_dir (Path or str): Directory to save the plot.
-    - xvalues (list or array): X-axis values.
-    - yvalues (list or array): Y-axis values.
-    - xlabel (str): Label for the X-axis.
-    - ylabel (str): Label for the Y-axis.
-    - set_name (str): Identifier for the plot filename.
+    Args:
+        output_dir (Path or str): Directory to save the plot.
+        xvalues (list or array): X-axis values.
+        yvalues (list or array): Y-axis values.
+        xlabel (str): Label for the X-axis.
+        ylabel (str): Label for the Y-axis.
+        set_name (str): Identifier for the plot filename.
     """
     xvalues = np.array(xvalues).reshape(-1, 1)
     yvalues = np.array(yvalues)
@@ -376,9 +425,10 @@ def create_scatterplots(output_dir, results, set_name):
     Create scatterplots for predictions vs code_lens
     and predictions vs nl_lens.
 
-    Parameters:
-    - output_dir (str): Directory to save the plots.
-    - results (list of dicts): List of data points.
+    Args:
+        output_dir (Path): Directory to save the scatter plots.
+        results (list of dicts): List of data points containing 'prediction', 'code_len', and 'nl_len'.
+        set_name (str): Identifier for the plot filenames.
     """
     predictions = [result["prediction"] for result in results]
     code_lens = [result["code_len"] for result in results]
@@ -405,9 +455,9 @@ def save_quartile_items(output_dir, results, set_name):
     Save the three items around each quartile point of the predictions as
     a JSON file.
 
-    Parameters:
-    - output_file (str): Filename to save the quartile items.
-    - results (list of dicts): List of data points sorted by prediction value.
+    Args:
+        output_file (str): Filename to save the quartile items.
+        results (list of dicts): List of data points sorted by prediction value.
     """
     n = len(results)
     q1_index = n // 4
@@ -428,6 +478,15 @@ def save_quartile_items(output_dir, results, set_name):
 
 
 def token_len_analysis(output_dir, results_file, data_file):
+    """
+    Analyzes token lengths of positive and negative predictions,
+    creates scatterplots, and saves quartile items.
+
+    Args:
+        output_dir (Path): Directory to save the analysis results.
+        results_file (dict): Dictionary with model evaluation results.
+        data_file (dict): Dictionary with detailed data entries.
+    """
     positives, negatives = sort_results(results_file, data_file)
 
     create_scatterplots(output_dir, positives, "pos")
