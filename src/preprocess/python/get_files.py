@@ -11,21 +11,23 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 
-def format_query(args):
+def format_query(query_path: str, project_dir: str):
     """
-    Processes a query JSON file containing commit information, formats the data, and saves the result to a new JSON file.
+    Processes a query JSON file containing commit information,
+    formats the data, and saves the result to a new JSON file.
 
     Args:
         args: An argparse.Namespace object containing the following attributes:
             - query_path (str): The path to the input query JSON file.
-            - project_dir (str): The directory where the output JSON file should be saved.
-            - repo (str): The name of the repository (used to name the output file).
+            - project_dir (str): The directory where the output JSON file
+                                 should be saved.
 
     Returns:
-        dict: A dictionary where keys are issue IDs and values are dictionaries containing issue details and related commits.
+        dict: A dictionary where keys are issue IDs and values are
+              dictionaries containing issue details and related commits.
     """
-    query_path = Path(args.query_path)
-    project_dir = Path(args.project_dir)
+    query_path = Path(query_path)
+    project_dir = Path(project_dir)
     project_dir.mkdir(parents=True, exist_ok=True)
 
     with query_path.open("r", encoding="utf-8") as f:
@@ -38,15 +40,14 @@ def format_query(args):
         issue_id = commit[0]
         summary = re.sub(r"^\[[A-Z]+\-[0-9]+\]\s*", "", commit[1])
         description = commit[2]
-        resolved_date = commit[3]
-        commit_id = commit[4]
+        commit_id = commit[3]
 
         if issue_id not in issues:
             issues[issue_id] = dict()
             issues[issue_id]["commits"] = []
 
         # Merge the summary and description into single nl input
-        description_soup = BeautifulSoup(description, "html.parser")
+        description_soup = BeautifulSoup(description, "html5lib")
         for div in description_soup.find_all("div", {"class": "code panel"}):
             div.decompose()
         nl_input = summary + "\n" + description_soup.get_text()
@@ -55,24 +56,26 @@ def format_query(args):
         issues[issue_id]["nl_input"] = nl_input
         issues[issue_id]["summary"] = summary
         issues[issue_id]["description"] = description
-        issues[issue_id]["resolved_date"] = resolved_date
         issues[issue_id]["commits"].append(commit_id)
 
     # Save the formatted issues dictionary to a new JSON file
-    save_json(project_dir.joinpath(f"{args.repo}_query.json"), issues)
+    save_json(project_dir.joinpath(f"{project_dir.name}_query.json"), issues)
 
     return issues
 
 
-def get_diff(owner: str, repo: str, head: str, project_dir: str, review_commits: set[tuple]):
+def get_diff(owner: str, repo: str, head: str, project_dir: str,
+             review_commits: set[tuple]):
     """
-    Retrieves the diff of a specific commit from a GitHub repository and saves the commit information and diff lines.
+    Retrieves the diff of a specific commit from a GitHub repository and saves
+    the commit information and diff lines.
 
     Args:
         owner (str): The owner of the GitHub repository.
         repo (str): The name of the repository.
         head (str): The commit SHA to pull the diff for.
-        project_dir (str): The directory where the commit information will be saved.
+        project_dir (str): The directory where the commit information
+                           will be saved.
         review_commits (set[tuple]): A set to store commits that need review.
 
     Returns:
@@ -86,16 +89,18 @@ def get_diff(owner: str, repo: str, head: str, project_dir: str, review_commits:
     )
     payload = {
         "Accept": "application/vnd.github+json",
-        "Authorization": f"Bearer {os.getenv("GITHUB_TOKEN")}",
+        "Authorization": f"Bearer {os.getenv("GITHUB_TOKEN2")}",
         "X-GitHub-Api-Version": "2022-11-28",
     }
 
     r = requests.get(url_head, params=payload)
     if r.status_code != 200:
-        save_json(commit_dir.parent.joinpath("review_commits.json"), list(review_commits))
+        save_json(commit_dir.parent.joinpath("review_commits.json"),
+                  list(review_commits))
 
         msg = f"Commit not found. Status code: {r.status_code}"
-        review_commits = mark_commit_for_review(commit_dir, review_commits, head, msg)
+        review_commits = mark_commit_for_review(commit_dir, review_commits,
+                                                head, msg)
         if r.status_code != 422:
             raise Exception(msg)
 
@@ -118,7 +123,9 @@ def get_diff(owner: str, repo: str, head: str, project_dir: str, review_commits:
                                       "Commit has no parents.")
 
     # Request the .patch
-    r_patches = requests.get(f"https://github.com/{owner}/{repo}/commit/{head}.patch")
+    r_patches = requests.get(
+        f"https://github.com/{owner}/{repo}/commit/{head}.patch"
+    )
     if r_patches.status_code != 200:
         msg = f"Error when requesting the .patch: {r_patches.status_code}"
         return mark_commit_for_review(commit_dir, review_commits, head, msg)
@@ -136,7 +143,8 @@ def get_diff(owner: str, repo: str, head: str, project_dir: str, review_commits:
     return review_commits
 
 
-def process_files(files_json, patches, owner, repo, head, commit_dir, parent_id, review_commits):
+def process_files(files_json, patches, owner, repo, head, commit_dir,
+                  parent_id, review_commits):
     """
     Process the files in the commit to extract and save their diff lines.
 
@@ -171,18 +179,16 @@ def process_files(files_json, patches, owner, repo, head, commit_dir, parent_id,
         except KeyError:
             return (None,
                     mark_commit_for_review(commit_dir, review_commits, head,
-                                           "Commit does not include a patch for this file, "
-                                           "due to e.g. the creation of an empty file."))
+                                           "Commit does not include a patch "
+                                           "for this file, due to e.g. "
+                                           "the creation of an empty file."))
 
         save_file(file, commit_dir)
         if file_status == "modified":
-            status_code, review_commits = get_parents(owner,
-                                                      repo,
-                                                      head,
-                                                      commit_dir,
-                                                      parent_id,
-                                                      diff_lines[file_name]["old_file"],
-                                                      review_commits)
+            status_code, review_commits = get_parents(
+                owner, repo, head, commit_dir, parent_id,
+                diff_lines[file_name]["old_file"], review_commits
+            )
             if status_code != 200:
                 return None, review_commits
 
@@ -213,9 +219,11 @@ def save_json(file_path, data):
     with file_path.open("w", encoding="utf-8") as f:
         f.write(json.dumps(data))
 
+
 def mark_commit_for_review(commit_dir, review_commits, head, msg):
     """
-    Mark a commit for review by saving the message and updating the review_commits set.
+    Mark a commit for review by saving the message and updating
+    the review_commits set.
 
     Args:
         commit_dir (Path): The directory where the commit information is saved.
@@ -237,7 +245,8 @@ def split_patches(patches: str):
         patches (str): The patch string containing diff information.
 
     Returns:
-        dict: A dictionary where keys are file names and values are patch details.
+        dict: A dictionary where keys are file names and values
+              are patch details.
     """
     patches = re.split("diff --git", patches)
 
@@ -252,11 +261,16 @@ def split_patches(patches: str):
         if old_file != "/dev/null":
             old_file = old_file[2:]
 
-        patch_content = re.split(r"@@ -[0-9]+,[0-9]+ \+[0-9]+,[0-9]+ @@[^\n]*\n", patch)[1:]
-        patch_lines = re.findall(r"@@ -[0-9]+,[0-9]+ \+[0-9]+,[0-9]+ @@", patch)
+        patch_content = re.split(
+            r"@@ -[0-9]+,[0-9]+ \+[0-9]+,[0-9]+ @@[^\n]*\n", patch
+        )[1:]
+        patch_lines = re.findall(
+            r"@@ -[0-9]+,[0-9]+ \+[0-9]+,[0-9]+ @@", patch
+        )
 
         patches_formatted[new_file] = {"old_file": old_file,
-                                       "patches": list(zip(patch_lines, patch_content))}
+                                       "patches": list(zip(patch_lines,
+                                                           patch_content))}
 
     return patches_formatted
 
@@ -266,7 +280,8 @@ def save_file(file: dict, commit_dir: Path):
     Saves the raw content of a file from a commit to the specified directory.
 
     Args:
-        file (dict): A dictionary containing file information including the raw URL.
+        file (dict): A dictionary containing file information including
+                     the raw URL.
         commit_dir (Path): The directory where the file should be saved.
     """
     new_raw = requests.get(file["raw_url"]).text
@@ -275,7 +290,9 @@ def save_file(file: dict, commit_dir: Path):
     with file_path.open("w", encoding="utf-8") as f:
         f.write(new_raw)
 
-def get_parents(owner: str, repo: str, head: str, commit_dir: Path, parent_id: str, old_file_name: str, review_commits: set[str]):
+
+def get_parents(owner: str, repo: str, head: str, commit_dir: Path,
+                parent_id: str, old_file_name: str, review_commits: set[str]):
     """
     Retrieves and saves the parent versions of a modified file.
 
@@ -292,7 +309,9 @@ def get_parents(owner: str, repo: str, head: str, commit_dir: Path, parent_id: s
         int: The HTTP status code of the request to retrieve the parent file.
         set[str]: The updated set of commits that need review.
     """
-    old_raw_url = f"https://github.com/{owner}/{repo}/raw/{parent_id}/{old_file_name}"
+    old_raw_url = (
+        f"https://github.com/{owner}/{repo}/raw/{parent_id}/{old_file_name}"
+    )
 
     old_r = requests.get(old_raw_url)
     if old_r.status_code == 200:
@@ -302,10 +321,10 @@ def get_parents(owner: str, repo: str, head: str, commit_dir: Path, parent_id: s
             f.write(old_r.text)
     else:
         msg = ("Unable to request parent file.\n"
-              f"Status code: {old_r.status_code}\n"
-              f"Requested url: {old_raw_url}\n")
-        review_commits.add((head, msg))
-        add_diff_lines(commit_dir, msg)
+               f"Status code: {old_r.status_code}\n"
+               f"Requested url: {old_raw_url}\n")
+        review_commits = mark_commit_for_review(commit_dir, review_commits,
+                                                head, msg)
 
     return old_r.status_code, review_commits
 
@@ -319,8 +338,8 @@ def get_lines(patches: dict):
 
     Returns:
         dict: A dictionary with keys 'diff_before' and 'diff_after' containing
-              the line numbers of each patch window before and after the changes,
-              and 'old_file' containing the name of the old file.
+              the line numbers of each patch window before and after
+              the changes, and 'old_file' containing the name of the old file.
     """
     diff_before, diff_after = [], []
 
@@ -373,7 +392,8 @@ def calc_lines(patch_lines: str):
     Extracts the line numbers before and after a change from a diff string.
 
     Args:
-        patch_lines (str): The diff string containing the line number information.
+        patch_lines (str): The diff string containing
+                           the line number information.
 
     Returns:
         tuple: The starting line numbers before and after the change.
@@ -387,19 +407,25 @@ def calc_lines(patch_lines: str):
 
 def read_commits(args, issues: dict=None):
     """
-    Reads commit information for issues from a JSON file and gets the diffs for each commit.
+    Reads commit information for issues from a JSON file and gets the diffs
+    for each commit.
 
     Args:
-        args (argparse.Namespace): An argparse.Namespace object containing the following attributes:
+        args (argparse.Namespace): An argparse.Namespace object containing
+                                   the following attributes:
             - owner (str): The owner of the GitHub repository.
             - repo (str): The name of the repository.
-            - project_dir (str): The directory where the commit information will be saved.
-            - issues_info_path (str): The path to the JSON file containing issue and commit information.
-        issues (dict, optional): A dictionary of issues and their associated commits. If not provided, it will be read from the issues_info_path.
+            - project_dir (str): The directory where the commit information
+                                 will be saved.
+            - issues_info_path (str): The path to the JSON file containing
+                                      issue and commit information.
+        issues (dict, optional): A dictionary of issues and their associated
+                                 commits. If not provided, it will be read
+                                 from the issues_info_path.
     """
-    if not issues:
+    if issues is None:
         input_path = Path(args.issues_info_path)
-        with input_path.open("r") as f:
+        with input_path.open("r", encoding="utf-8") as f:
             issues = json.load(f)
 
     project_dir = Path(args.project_dir)
@@ -420,9 +446,11 @@ def read_commits(args, issues: dict=None):
 
                 continue
 
-            review_commits = get_diff(args.owner, args.repo, commit, args.project_dir, review_commits)
+            review_commits = get_diff(args.owner, args.repo, commit,
+                                      args.project_dir, review_commits)
 
-    save_json(project_dir.joinpath("review_commits.json"), list(review_commits))
+    save_json(project_dir.joinpath("review_commits.json"),
+              list(review_commits))
 
 
 def main():
@@ -457,23 +485,26 @@ def main():
         default=None,
         type=str,
         required=True,
-        help="The output directory where all commit and dataset information will be written.",
+        help=("The output directory where all commit and "
+              "dataset information will be written."),
     )
     parser.add_argument(
         "--issues_info_path",
         default=None,
         type=str,
         required=False,
-        help="The path to the reformatted query json containing the issues and their commits in hierarchical structure.",
+        help=("The path to the reformatted query json containing the issues "
+              "and their commits in hierarchical structure."),
     )
 
     args = parser.parse_args()
-    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
-                        datefmt='%m/%d/%Y %H:%M:%S',level=logging.INFO)
+    logging.basicConfig(format=("%(asctime)s - %(levelname)s - %(name)s -   "
+                                "%(message)s"),
+                        datefmt="%m/%d/%Y %H:%M:%S", level=logging.INFO)
 
     load_dotenv()
     if args.query_path:
-        issues_info = format_query(args)
+        issues_info = format_query(args.query_path, args.project_dir)
         read_commits(args, issues_info)
     else:
         read_commits(args)

@@ -10,10 +10,16 @@ import List;
 import Map;
 import Type;
 import Extract;
-import Compare;
 
 
-map[str, list[node]] updateNodes(map[str, value] method, map[str, list[node]] methodNodes) {
+/**
+ * Updates a map of method nodes with a new node if it's not already present.
+ *
+ * @param method A map containing the method information, including the method name and the node.
+ * @param methodNodes A map of method names to lists of nodes representing those methods.
+ * @return The updated map of method nodes, or `()` if no update was necessary.
+ */
+private map[str, list[node]] updateNodes(map[str, value] method, map[str, list[node]] methodNodes) {
     methodName = typeCast(#str, method["method_name"]);
     methodNode = method["node"];
 
@@ -34,7 +40,7 @@ map[str, list[node]] updateNodes(map[str, value] method, map[str, list[node]] me
  * @param issuesLocation The location of the issues JSON file.
  * @return An integer status code (0 for success).
  */
-int main(loc projectLocation, loc issuesLocation) {
+public int extractProjectMethods(loc projectLocation, loc issuesLocation) {
     // Read the issues data from the JSON file
     map[str, map[str, value]] issues = readJSON(#map[str, map[str, value]], issuesLocation);
 
@@ -42,9 +48,6 @@ int main(loc projectLocation, loc issuesLocation) {
     writeJSON(dataLocation, []);
     loc methodsOldLoc = projectLocation + "methodsOld_tmp.json";
     loc methodsNewLoc = projectLocation + "methodsNew_tmp.json";
-
-    set[str] commits = {};
-    set[str] dupeCommits = {};
 
     int i = 0;
     println("Total #issues: <size(issues)>");
@@ -60,11 +63,6 @@ int main(loc projectLocation, loc issuesLocation) {
         for (commit <- typeCast(#list[str], issues[issue]["commits"])) {
             if (!exists(projectLocation + commit)) { continue; }
 
-            if (commit in commits) { dupeCommits += commit; }
-            else { commits += commit; }
-
-            list[map[str, value]] methodsNew = [];
-            list[map[str, value]] methodsOld = [];
             // Base information to be added to each method's info
             map[str, value] baseInfo = ("issue":issue,
                                         "commit":commit,
@@ -101,10 +99,11 @@ int main(loc projectLocation, loc issuesLocation) {
         int nNegatives = 0;
         iprintln("#Methods to double check: " + toString(size(methodsOldAll)));
         for (method <- methodsOldAll) {
+            // Prevent duplicate old method entries
             update = updateNodes(method, nodesOld);
             if (update == ()) { continue; }
-            else { nodesOld = update; }
 
+            nodesOld = update;
             methodName = typeCast(#str, method["method_name"]);
             oldNode = typeCast(#node, method["node"]);
             if (methodName notin nodesNew || !any(n <- nodesNew[methodName], areSimilar(n, oldNode))) {
@@ -120,7 +119,27 @@ int main(loc projectLocation, loc issuesLocation) {
 
     // Write the entries and issues data to JSON files
     writeJSON(issuesLocation, issues);
-    writeJSON(projectLocation + "duplicate_commits.json", dupeCommits);
+
+    return 0;
+}
+
+
+// main_mult(|project://funcbert/projects/seoss|, ["archiva", "cassandra", "errai", "flink", "hadoop", "hbase", "hibernate", "hive", "hornetq", "izpack", "jboss", "kafka", "keycloak", "lucene", "railo", "resteasy", "spark", "switchyard", "teiid", "zookeeper"]);
+/**
+ * Main entry point for the program to analyze multiple projects.
+ *
+ * This function iterates over a list of projects, extracting methods
+ * and analyzing them against issue data for each project.
+ *
+ * @param root The root location where all the projects are stored.
+ * @param projects A list of project names to be analyzed.
+ * @return An integer status code (0 for success).
+ */
+int main(loc root, list[str] projects) {
+    for (project <- projects) {
+        str queryFile = project + "_query.json";
+        extractProjectMethods(root + project, root + project + queryFile);
+    }
 
     return 0;
 }

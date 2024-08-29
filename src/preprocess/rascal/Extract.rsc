@@ -12,7 +12,6 @@ import Set;
 import String;
 import Type;
 import Exception;
-import Compare;
 
 
 /**
@@ -196,13 +195,35 @@ bool diffCheck(map[str, value] methodInfo, list[int] diff) {
 
 
 /**
+ * Compares two subtrees to determine if they are structurally similar.
+ *
+ * @param n1 The root of the first subtree to be compared.
+ * @param n2 The root of the second subtree to be compared.
+ * @return `true` if the nodes are structurally similar after unsetting 
+ *         specified attributes, `false` otherwise.
+ */
+public bool areSimilar(node n1, node n2) {
+    n1 = unsetRec(n1, {"src", "decl"});
+    n2 = unsetRec(n2, {"src", "decl"});
+
+    list[node] tree1 = [];
+    list[node] tree2 = [];
+
+    visit (n1) { case node n: tree1 += n; }
+    visit (n2) { case node n: tree2 += n; }
+
+    return tree1 == tree2;
+}
+
+
+/**
  * Create a list containing all methods changed in a commit.
  *
  * @param commitLocation The location of the commit to analyze.
  * @param baseInfo A map of base information to be added to each method's info.
  * @return A tuple containing a list of new method information maps, and a list of old method information maps.
  */
-tuple[list[map[str, value]], list[map[str, value]]]
+public tuple[list[map[str, value]], list[map[str, value]]]
 getChangedMethods(loc commitLocation, map[str, value] baseInfo) {
     set[loc] fileLocationsNew = files(commitLocation + "new");
     if (fileLocationsNew == {}) { return <[], []>; }
