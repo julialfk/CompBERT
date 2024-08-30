@@ -1,0 +1,146 @@
+{
+    "sha": "a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+    "node_id": "MDY6Q29tbWl0MjA2NDgzOmE1NWZkMDQ2OTYxYWM0ZjNmMTFlMjUwMmE3ZDZmOThjNzk5ZTllZDA=",
+    "commit": {
+        "author": {
+            "name": "John Dennis Casey",
+            "email": "jdcasey@apache.org",
+            "date": "2005-06-13T14:49:49Z"
+        },
+        "committer": {
+            "name": "John Dennis Casey",
+            "email": "jdcasey@apache.org",
+            "date": "2005-06-13T14:49:49Z"
+        },
+        "message": "o Adding ${plugin.*} expression support for mojos. Specifically, added support for ${plugin.artifacts} to retrieve the plugin's classpath artifacts. NOTE: There may be artifacts which are FILTERED by the resolution process, since they are provided in the maven distro. NOT SURE HOW BEST TO RESOLVE THAT...but it'll cause problems with people forking certain mojos, undoubtedly.\n\nMay resolve: MNG-455\n\n\n\ngit-svn-id: https://svn.apache.org/repos/asf/maven/components/trunk@190413 13f79535-47bb-0310-9956-ffa450edef68",
+        "tree": {
+            "sha": "63e9da5816ca539f667a040d3a2d1cd378e53e96",
+            "url": "https://api.github.com/repos/apache/maven/git/trees/63e9da5816ca539f667a040d3a2d1cd378e53e96"
+        },
+        "url": "https://api.github.com/repos/apache/maven/git/commits/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+        "comment_count": 0,
+        "verification": {
+            "verified": false,
+            "reason": "unsigned",
+            "signature": null,
+            "payload": null
+        }
+    },
+    "url": "https://api.github.com/repos/apache/maven/commits/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+    "html_url": "https://github.com/apache/maven/commit/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+    "comments_url": "https://api.github.com/repos/apache/maven/commits/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/comments",
+    "author": {
+        "login": "jdcasey",
+        "id": 65614,
+        "node_id": "MDQ6VXNlcjY1NjE0",
+        "avatar_url": "https://avatars.githubusercontent.com/u/65614?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jdcasey",
+        "html_url": "https://github.com/jdcasey",
+        "followers_url": "https://api.github.com/users/jdcasey/followers",
+        "following_url": "https://api.github.com/users/jdcasey/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jdcasey/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jdcasey/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jdcasey/subscriptions",
+        "organizations_url": "https://api.github.com/users/jdcasey/orgs",
+        "repos_url": "https://api.github.com/users/jdcasey/repos",
+        "events_url": "https://api.github.com/users/jdcasey/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jdcasey/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "committer": {
+        "login": "jdcasey",
+        "id": 65614,
+        "node_id": "MDQ6VXNlcjY1NjE0",
+        "avatar_url": "https://avatars.githubusercontent.com/u/65614?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jdcasey",
+        "html_url": "https://github.com/jdcasey",
+        "followers_url": "https://api.github.com/users/jdcasey/followers",
+        "following_url": "https://api.github.com/users/jdcasey/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jdcasey/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jdcasey/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jdcasey/subscriptions",
+        "organizations_url": "https://api.github.com/users/jdcasey/orgs",
+        "repos_url": "https://api.github.com/users/jdcasey/repos",
+        "events_url": "https://api.github.com/users/jdcasey/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jdcasey/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    "parents": [
+        {
+            "sha": "64ac374aea8e4c8ebe105e514b195c7b39aac390",
+            "url": "https://api.github.com/repos/apache/maven/commits/64ac374aea8e4c8ebe105e514b195c7b39aac390",
+            "html_url": "https://github.com/apache/maven/commit/64ac374aea8e4c8ebe105e514b195c7b39aac390"
+        }
+    ],
+    "stats": {
+        "total": 104,
+        "additions": 93,
+        "deletions": 11
+    },
+    "files": [
+        {
+            "sha": "fa2869bd563b806d352e96887da1b94f1073a0af",
+            "filename": "maven-core-it-plugin/src/main/java/org/apache/maven/plugin/coreit/CoreItMojo.java",
+            "status": "modified",
+            "additions": 7,
+            "deletions": 0,
+            "changes": 7,
+            "blob_url": "https://github.com/apache/maven/blob/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core-it-plugin%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2Fcoreit%2FCoreItMojo.java",
+            "raw_url": "https://github.com/apache/maven/raw/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core-it-plugin%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2Fcoreit%2FCoreItMojo.java",
+            "contents_url": "https://api.github.com/repos/apache/maven/contents/maven-core-it-plugin%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2Fcoreit%2FCoreItMojo.java?ref=a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+            "patch": "@@ -22,6 +22,7 @@\n import java.io.IOException;\n import java.io.File;\n import java.io.FileWriter;\n+import java.util.List;\n \n /**\n  * @goal touch\n@@ -39,6 +40,12 @@ public class CoreItMojo\n      */\n     private String outputDirectory;\n \n+    /** Test setting of plugin-artifacts on the PluginDescriptor instance.\n+     * @parameter expression=\"${plugin.artifacts}\"\n+     * @required\n+     */\n+    private List pluginArtifacts;\n+\n     /**\n      * @parameter expression=\"target/test-basedir-alignment\"\n      */"
+        },
+        {
+            "sha": "e088b31673743603fcb1cc9391df648a7d429ae9",
+            "filename": "maven-core/src/main/java/org/apache/maven/plugin/DefaultPluginManager.java",
+            "status": "modified",
+            "additions": 10,
+            "deletions": 2,
+            "changes": 12,
+            "blob_url": "https://github.com/apache/maven/blob/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FDefaultPluginManager.java",
+            "raw_url": "https://github.com/apache/maven/raw/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FDefaultPluginManager.java",
+            "contents_url": "https://api.github.com/repos/apache/maven/contents/maven-core%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FDefaultPluginManager.java?ref=a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+            "patch": "@@ -185,7 +185,6 @@ public PluginDescriptor verifyPlugin( String groupId, String artifactId, String\n         // TODO: this should be possibly outside\n         if ( version == null )\n         {\n-\n             Plugin pluginConfig = null;\n \n             for ( Iterator it = project.getBuildPlugins().iterator(); it.hasNext(); )\n@@ -299,6 +298,12 @@ protected void addPlugin( String pluginKey, Artifact pluginArtifact, MavenProjec\n             }\n \n             container.createChildContainer( pluginKey, files, Collections.EMPTY_MAP, Collections.singletonList( this ) );\n+            \n+            // this plugin's descriptor should have been discovered by now, so we should be able to circle\n+            // around and set the artifacts.\n+            PluginDescriptor addedPlugin = (PluginDescriptor) pluginDescriptors.get( pluginKey );\n+\n+            addedPlugin.setArtifacts( new ArrayList( resolved.values() ) );\n         }\n         finally\n         {\n@@ -413,8 +418,11 @@ public void executeMojo( MavenSession session, GoalInstance goalInstance )\n             //            PlexusConfiguration mergedConfiguration = mergeConfiguration( pomConfiguration,\n             //                                                                          mojoDescriptor.getConfiguration() );\n \n-            ExpressionEvaluator expressionEvaluator = new PluginParameterExpressionEvaluator( session, pathTranslator,\n+            ExpressionEvaluator expressionEvaluator = new PluginParameterExpressionEvaluator( session,\n+                                                                                              pluginDescriptor,\n+                                                                                              pathTranslator,\n                                                                                               getLogger() );\n+            \n             checkRequiredParameters( mojoDescriptor, mergedConfiguration, expressionEvaluator, plugin );\n \n             populatePluginFields( plugin, mojoDescriptor, mergedConfiguration, pluginContainer, expressionEvaluator );"
+        },
+        {
+            "sha": "000c569d0417fc1913da72be78b9f8785b1e63e6",
+            "filename": "maven-core/src/main/java/org/apache/maven/plugin/PluginParameterExpressionEvaluator.java",
+            "status": "modified",
+            "additions": 29,
+            "deletions": 1,
+            "changes": 30,
+            "blob_url": "https://github.com/apache/maven/blob/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FPluginParameterExpressionEvaluator.java",
+            "raw_url": "https://github.com/apache/maven/raw/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FPluginParameterExpressionEvaluator.java",
+            "contents_url": "https://api.github.com/repos/apache/maven/contents/maven-core%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FPluginParameterExpressionEvaluator.java?ref=a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+            "patch": "@@ -17,6 +17,7 @@\n  */\n \n import org.apache.maven.execution.MavenSession;\n+import org.apache.maven.plugin.descriptor.PluginDescriptor;\n import org.apache.maven.project.path.PathTranslator;\n import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;\n import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluator;\n@@ -39,9 +40,12 @@ public class PluginParameterExpressionEvaluator\n \n     private final Logger logger;\n \n-    public PluginParameterExpressionEvaluator( MavenSession context, PathTranslator pathTranslator, Logger logger )\n+    private final PluginDescriptor pluginDescriptor;\n+\n+    public PluginParameterExpressionEvaluator( MavenSession context, PluginDescriptor pluginDescriptor, PathTranslator pathTranslator, Logger logger )\n     {\n         this.context = context;\n+        this.pluginDescriptor = pluginDescriptor;\n         this.pathTranslator = pathTranslator;\n         this.logger = logger;\n     }\n@@ -108,6 +112,30 @@ else if ( expression.startsWith( \"project\" ) )\n                                                          e );\n             }\n         }\n+        else if ( expression.startsWith( \"plugin\" ) )\n+        {\n+            try\n+            {\n+                int pathSeparator = expression.indexOf( \"/\" );\n+\n+                if ( pathSeparator > 0 )\n+                {\n+                    String pathExpression = expression.substring( 1, pathSeparator );\n+                    value = ReflectionValueExtractor.evaluate( pathExpression, pluginDescriptor );\n+                    value = value + expression.substring( pathSeparator );\n+                }\n+                else\n+                {\n+                    value = ReflectionValueExtractor.evaluate( expression.substring( 1 ), pluginDescriptor );\n+                }\n+            }\n+            catch ( Exception e )\n+            {\n+                // TODO: don't catch exception\n+                throw new ExpressionEvaluationException( \"Error evaluating plugin parameter expression: \" + expression,\n+                                                         e );\n+            }\n+        }\n         else if ( \"settings\".equals( expression ) )\n         {\n             value = context.getSettings();"
+        },
+        {
+            "sha": "01c673dfc14fe8045e88e6ea793a9316e38f801a",
+            "filename": "maven-core/src/test/java/org/apache/maven/plugin/PluginParameterExpressionEvaluatorTest.java",
+            "status": "modified",
+            "additions": 35,
+            "deletions": 8,
+            "changes": 43,
+            "blob_url": "https://github.com/apache/maven/blob/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core%2Fsrc%2Ftest%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FPluginParameterExpressionEvaluatorTest.java",
+            "raw_url": "https://github.com/apache/maven/raw/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-core%2Fsrc%2Ftest%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FPluginParameterExpressionEvaluatorTest.java",
+            "contents_url": "https://api.github.com/repos/apache/maven/contents/maven-core%2Fsrc%2Ftest%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2FPluginParameterExpressionEvaluatorTest.java?ref=a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+            "patch": "@@ -16,12 +16,15 @@\n  * limitations under the License.\n  */\n \n+import org.apache.maven.artifact.Artifact;\n+import org.apache.maven.artifact.DefaultArtifact;\n import org.apache.maven.artifact.repository.ArtifactRepository;\n import org.apache.maven.artifact.repository.layout.ArtifactRepositoryLayout;\n import org.apache.maven.execution.MavenSession;\n import org.apache.maven.model.Build;\n import org.apache.maven.model.Model;\n import org.apache.maven.monitor.event.DefaultEventDispatcher;\n+import org.apache.maven.plugin.descriptor.PluginDescriptor;\n import org.apache.maven.project.MavenProject;\n import org.apache.maven.settings.Settings;\n import org.codehaus.plexus.PlexusContainer;\n@@ -30,6 +33,7 @@\n \n import java.io.File;\n import java.util.Collections;\n+import java.util.List;\n \n /**\n  * @author <a href=\"mailto:jason@maven.org\">Jason van Zyl </a>\n@@ -53,16 +57,15 @@ public void testValueExtractionWithAPomValueContainingAPath()\n         MavenProject project = new MavenProject( model );\n         project.setFile( new File( \"pom.xml\" ).getCanonicalFile() );\n \n-        ExpressionEvaluator expressionEvaluator = createExpressionEvaluator( project );\n+        ExpressionEvaluator expressionEvaluator = createExpressionEvaluator( project, null );\n \n         Object value = expressionEvaluator.evaluate( \"${project.build.directory}/classes\" );\n         String actual = new File( value.toString() ).getCanonicalPath();\n \n         assertEquals( expected, actual );\n     }\n \n-    private static MavenSession createSession( MavenProject project, PlexusContainer container,\n-                                               ArtifactRepository repo )\n+    private static MavenSession createSession( MavenProject project, PlexusContainer container, ArtifactRepository repo )\n     {\n         return new MavenSession( project, container, new Settings(), repo, new DefaultEventDispatcher(),\n                                  Collections.EMPTY_LIST );\n@@ -71,7 +74,7 @@ private static MavenSession createSession( MavenProject project, PlexusContainer\n     public void testLocalRepositoryExtraction()\n         throws Exception\n     {\n-        ExpressionEvaluator expressionEvaluator = createExpressionEvaluator( createDefaultProject() );\n+        ExpressionEvaluator expressionEvaluator = createExpressionEvaluator( createDefaultProject(), null );\n         Object value = expressionEvaluator.evaluate( \"${localRepository}\" );\n \n         assertEquals( \"local\", ( (ArtifactRepository) value ).getId() );\n@@ -87,19 +90,43 @@ public void testTwoExpressions()\n         Model model = new Model();\n         model.setBuild( build );\n \n-        ExpressionEvaluator expressionEvaluator = createExpressionEvaluator( new MavenProject( model ) );\n+        ExpressionEvaluator expressionEvaluator = createExpressionEvaluator( new MavenProject( model ), null );\n \n         Object value = expressionEvaluator.evaluate( \"${project.build.directory}/${project.build.finalName}\" );\n \n         assertEquals( \"expected-directory/expected-finalName\", value );\n     }\n \n+    public void testShouldExtractPluginArtifacts()\n+        throws Exception\n+    {\n+        PluginDescriptor pd = new PluginDescriptor();\n+\n+        Artifact artifact = new DefaultArtifact( \"testGroup\", \"testArtifact\", \"1.0\", Artifact.SCOPE_COMPILE, \"jar\" );\n+\n+        pd.setArtifacts( Collections.singletonList( artifact ) );\n+\n+        ExpressionEvaluator ee = createExpressionEvaluator( createDefaultProject(), pd );\n+\n+        Object value = ee.evaluate( \"${plugin.artifacts}\" );\n+\n+        assertTrue( value instanceof List );\n+\n+        List artifacts = (List) value;\n+\n+        assertEquals( 1, artifacts.size() );\n+\n+        Artifact result = (Artifact) artifacts.get( 0 );\n+\n+        assertEquals( \"testGroup\", result.getGroupId() );\n+    }\n+\n     private MavenProject createDefaultProject()\n     {\n         return new MavenProject( new Model() );\n     }\n \n-    private ExpressionEvaluator createExpressionEvaluator( MavenProject project )\n+    private ExpressionEvaluator createExpressionEvaluator( MavenProject project, PluginDescriptor pluginDescriptor )\n         throws Exception\n     {\n         ArtifactRepositoryLayout repoLayout = (ArtifactRepositoryLayout) lookup( ArtifactRepositoryLayout.ROLE,\n@@ -110,8 +137,8 @@ private ExpressionEvaluator createExpressionEvaluator( MavenProject project )\n         PlexusContainer container = getContainer();\n         MavenSession session = createSession( project, container, repo );\n \n-        ExpressionEvaluator expressionEvaluator = new PluginParameterExpressionEvaluator( session, null,\n-                                                                                          container.getLogger() );\n+        ExpressionEvaluator expressionEvaluator = new PluginParameterExpressionEvaluator( session, pluginDescriptor,\n+                                                                                          null, container.getLogger() );\n         return expressionEvaluator;\n     }\n }\n\\ No newline at end of file"
+        },
+        {
+            "sha": "e1d85373c1b11bd7957bad185690e67987714b16",
+            "filename": "maven-plugin-descriptor/src/main/java/org/apache/maven/plugin/descriptor/PluginDescriptor.java",
+            "status": "modified",
+            "additions": 12,
+            "deletions": 0,
+            "changes": 12,
+            "blob_url": "https://github.com/apache/maven/blob/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-plugin-descriptor%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2Fdescriptor%2FPluginDescriptor.java",
+            "raw_url": "https://github.com/apache/maven/raw/a55fd046961ac4f3f11e2502a7d6f98c799e9ed0/maven-plugin-descriptor%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2Fdescriptor%2FPluginDescriptor.java",
+            "contents_url": "https://api.github.com/repos/apache/maven/contents/maven-plugin-descriptor%2Fsrc%2Fmain%2Fjava%2Forg%2Fapache%2Fmaven%2Fplugin%2Fdescriptor%2FPluginDescriptor.java?ref=a55fd046961ac4f3f11e2502a7d6f98c799e9ed0",
+            "patch": "@@ -40,6 +40,8 @@ public class PluginDescriptor\n     private String source;\n \n     private boolean inheritedByDefault = true;\n+    \n+    private List artifacts;\n \n     // ----------------------------------------------------------------------\n     //\n@@ -189,6 +191,16 @@ public void setInheritedByDefault( boolean inheritedByDefault )\n     {\n         this.inheritedByDefault = inheritedByDefault;\n     }\n+    \n+    public List getArtifacts()\n+    {\n+        return artifacts;\n+    }\n+\n+    public void setArtifacts( List artifacts )\n+    {\n+        this.artifacts = artifacts;\n+    }\n \n     public boolean equals( Object object )\n     {"
+        }
+    ]
+}

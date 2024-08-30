@@ -1,0 +1,213 @@
+{
+    "maven-core-it-plugin/src/main/java/org/apache/maven/plugin/coreit/CoreItMojo.java": {
+        "diff_before": [
+            [
+                24,
+                25
+            ],
+            [
+                41,
+                42
+            ]
+        ],
+        "diff_after": [
+            [
+                24,
+                26
+            ],
+            [
+                42,
+                49
+            ]
+        ],
+        "old_file": "maven-core-it-plugin/src/main/java/org/apache/maven/plugin/coreit/CoreItMojo.java"
+    },
+    "maven-core/src/main/java/org/apache/maven/plugin/DefaultPluginManager.java": {
+        "diff_before": [
+            [
+                187,
+                189
+            ],
+            [
+                301,
+                302
+            ],
+            [
+                415,
+                417
+            ],
+            [
+                417,
+                418
+            ]
+        ],
+        "diff_after": [
+            [
+                187,
+                188
+            ],
+            [
+                300,
+                307
+            ],
+            [
+                420,
+                424
+            ],
+            [
+                424,
+                426
+            ]
+        ],
+        "old_file": "maven-core/src/main/java/org/apache/maven/plugin/DefaultPluginManager.java"
+    },
+    "maven-core/src/main/java/org/apache/maven/plugin/PluginParameterExpressionEvaluator.java": {
+        "diff_before": [
+            [
+                19,
+                20
+            ],
+            [
+                41,
+                43
+            ],
+            [
+                44,
+                45
+            ],
+            [
+                110,
+                111
+            ]
+        ],
+        "diff_after": [
+            [
+                19,
+                21
+            ],
+            [
+                42,
+                46
+            ],
+            [
+                47,
+                49
+            ],
+            [
+                114,
+                139
+            ]
+        ],
+        "old_file": "maven-core/src/main/java/org/apache/maven/plugin/PluginParameterExpressionEvaluator.java"
+    },
+    "maven-core/src/test/java/org/apache/maven/plugin/PluginParameterExpressionEvaluatorTest.java": {
+        "diff_before": [
+            [
+                18,
+                19
+            ],
+            [
+                24,
+                25
+            ],
+            [
+                32,
+                33
+            ],
+            [
+                55,
+                57
+            ],
+            [
+                63,
+                66
+            ],
+            [
+                73,
+                75
+            ],
+            [
+                89,
+                91
+            ],
+            [
+                96,
+                97
+            ],
+            [
+                101,
+                103
+            ],
+            [
+                112,
+                115
+            ]
+        ],
+        "diff_after": [
+            [
+                18,
+                21
+            ],
+            [
+                26,
+                28
+            ],
+            [
+                35,
+                37
+            ],
+            [
+                59,
+                61
+            ],
+            [
+                67,
+                69
+            ],
+            [
+                76,
+                78
+            ],
+            [
+                92,
+                94
+            ],
+            [
+                99,
+                124
+            ],
+            [
+                128,
+                130
+            ],
+            [
+                139,
+                142
+            ]
+        ],
+        "old_file": "maven-core/src/test/java/org/apache/maven/plugin/PluginParameterExpressionEvaluatorTest.java"
+    },
+    "maven-plugin-descriptor/src/main/java/org/apache/maven/plugin/descriptor/PluginDescriptor.java": {
+        "diff_before": [
+            [
+                42,
+                43
+            ],
+            [
+                191,
+                192
+            ]
+        ],
+        "diff_after": [
+            [
+                42,
+                45
+            ],
+            [
+                193,
+                204
+            ]
+        ],
+        "old_file": "maven-plugin-descriptor/src/main/java/org/apache/maven/plugin/descriptor/PluginDescriptor.java"
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "DefaultPluginManager.java": {
+        "diff_before": [
+            [
+                187,
+                189
+            ],
+            [
+                301,
+                302
+            ],
+            [
+                415,
+                417
+            ],
+            [
+                417,
+                418
+            ]
+        ],
+        "diff_after": [
+            [
+                187,
+                188
+            ],
+            [
+                300,
+                307
+            ],
+            [
+                420,
+                424
+            ],
+            [
+                424,
+                426
+            ]
+        ],
+        "old_file": "DefaultPluginManager.java"
+    }
+}

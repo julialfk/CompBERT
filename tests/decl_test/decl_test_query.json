@@ -1,0 +1,12 @@
+{
+    "MRM-124": {
+        "summary": "web service interface",
+        "nl_input": "web service interface\nthis needs a new jira component.\n\nWe need a comprehensive web services interface to the application. Like RSS, it should be a new view on the same actions. The more we can derive that from the repository-core interfaces, the better.\nThis should include administration and security.\n\n",
+        "positives": 67,
+        "negatives": 44,
+        "commits": [
+            "1"
+        ],
+        "description": "this needs a new jira component.\n\nWe need a comprehensive web services interface to the application. Like RSS, it should be a new view on the same actions. The more we can derive that from the repository-core interfaces, the better.\nThis should include administration and security.\n\n"
+    }
+}

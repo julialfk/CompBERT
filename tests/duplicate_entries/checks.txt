@@ -1,0 +1,5 @@
+for commit 1 and 2: only items from one of the 2 should be included in the dataset, since they are identical commits.
+changes in commit 1/2: addPlugin, executeMojo. verifyPlugin only change in format, so should not be included as changed.
+
+downloadDependencies is included in 1/2/4 old, but not in 3, so this one should not be tagged as change.
+The same for isPluginInstalledForPrefix. Included in 4 old, but not any other files.
