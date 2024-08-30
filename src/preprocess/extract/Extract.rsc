@@ -93,7 +93,7 @@ getMethodsNew(loc fileLocation,
                                             "node":n)
                                          + baseInfo;
 
-            // compare the new method with the old commits.
+            // Compare the new method with the old commits.
             // If they are different, the method has been changed.
             map[str, value] newMethod = writeMethod(methodInfo, methodsOldMap, diffLines, fileLocStr);
             if (newMethod != ()) {
@@ -139,7 +139,6 @@ map[str, value] writeMethod(map[str, value] methodInfo,
                             str fileLocStr) {
     map[str, value] diffLinesFile = diffLines[fileLocStr];
     // A method is part of the change if it is new and thus cannot be found in the previous commit
-    // If a file is added, the patch will show no lines before commit or [0,-1]
     str oldFileName = typeCast(#str, diffLinesFile["old_file"]);
     str methodName = typeCast(#str, methodInfo["method_name"]);
 
@@ -245,6 +244,7 @@ getChangedMethods(loc commitLocation, map[str, value] baseInfo) {
                                     | newFile <- diffLines,
                                       diffLines[newFile]["old_file"] != "/dev/null");
 
+    // Process each file in the old commit to extract methods
     map[str, map[str, list[map[str, value]]]] methodsOldMap = ();
     list[map[str, value]] methodsOldAll = [];
     println("Total files: <size(fileLocationsOld) + size(fileLocationsNew)>");
@@ -258,6 +258,7 @@ getChangedMethods(loc commitLocation, map[str, value] baseInfo) {
         i += 1;
     }
 
+    // Process each file in the new commit to extract and compare methods
     list[map[str, value]] methodsNewAll = [];
     for (file <- fileLocationsNew) {
         if (i%20 == 0) { println("Processing file #<i>"); }

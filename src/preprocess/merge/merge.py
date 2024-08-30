@@ -204,19 +204,19 @@ def main():
     root_dir = Path(args.root_dir)
     excludes_base = [r"^test/", "/test/", "example/", "examples/", "mock/"]
     training_projects = [
-        ("drools", ["testframework/",
-                    "/TestNode.java",
-                    "testing/",
-                    "integrationtests/",
-                    "/Tester.java",
-                    "drools-example"]),
+        # ("drools", ["testframework/",
+        #             "/TestNode.java",
+        #             "testing/",
+        #             "integrationtests/",
+        #             "/Tester.java",
+        #             "drools-example"]),
         ("groovy", ["test-resources"]),
-        ("maven", ["integration-tests/",
-                   "TestResourcesMojo.java",
-                   "test-plugin/"]),
-        ("infinispan", ["testsuite/",
-                        "integrationtests/",
-                        "integrationtest/"]),
+        # ("maven", ["integration-tests/",
+        #            "TestResourcesMojo.java",
+        #            "test-plugin/"]),
+        # ("infinispan", ["testsuite/",
+        #                 "integrationtests/",
+        #                 "integrationtest/"]),
         ("pig", []),
         ("seam2", ["examples-ee6/", "generated-component/"]),
     ]
@@ -247,10 +247,10 @@ def main():
 
     write_dataset(root_dir, "json", excludes_base, training_projects, "train")
     count(root_dir, excludes_base, training_projects, "train")
-    write_dataset(root_dir, "json", excludes_base, dev_projects, "dev")
-    count(root_dir, excludes_base, dev_projects, "dev")
-    write_dataset(root_dir, "json", excludes_base, eval_projects, "eval")
-    count(root_dir, excludes_base, eval_projects, "eval")
+    # write_dataset(root_dir, "json", excludes_base, dev_projects, "dev")
+    # count(root_dir, excludes_base, dev_projects, "dev")
+    # write_dataset(root_dir, "json", excludes_base, eval_projects, "eval")
+    # count(root_dir, excludes_base, eval_projects, "eval")
 
 
 if __name__ == "__main__":
