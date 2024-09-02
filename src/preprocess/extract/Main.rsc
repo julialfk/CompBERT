@@ -124,7 +124,6 @@ public int extractProjectMethods(loc projectLocation, loc issuesLocation) {
 }
 
 
-// main(|project://funcbert/projects/seoss|, ["archiva", "cassandra", "errai", "flink", "hadoop", "hbase", "hibernate", "hive", "hornetq", "izpack", "jboss", "kafka", "keycloak", "lucene", "railo", "resteasy", "spark", "switchyard", "teiid", "zookeeper"]);
 /**
  * Main entry point for the program to analyze multiple projects.
  *
