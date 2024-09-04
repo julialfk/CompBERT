@@ -1,0 +1,223 @@
+{
+    "lowest": [
+        {
+            "prediction": 0.05119967833161354,
+            "code": "  public static void setLongVar(Configuration conf, ConfVars var, long val) {\n    assert (var.valClass == Long.class);\n    conf.setLong(var.varname, val);\n  }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 48,
+            "nl_len": 90,
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java",
+            "evaluation": "Again, same issue lowest scores as in positives. Maybe bias for this issue. Description does use more generic keywords that do not occur in methods."
+        },
+        {
+            "prediction": 0.05342835187911987,
+            "code": "  public void setLongVar(ConfVars var, long val) {\n    setLongVar(this, var, val);\n  }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 30,
+            "nl_len": 90,
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java"
+        },
+        {
+            "prediction": 0.05524633452296257,
+            "code": "  public long getLongVar(ConfVars var) {\n    return getLongVar(this, var);\n  }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 26,
+            "nl_len": 90,
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java"
+        },
+        {
+            "prediction": 0.05665186047554016,
+            "code": "  private Class<? extends RecordReader> getRecordReader(ASTNode node)\n      throws SemanticException {\n    String name;\n\n    if (node.getChildCount() == 0) {\n      name = conf.getVar(HiveConf.ConfVars.HIVESCRIPTRECORDREADER);\n    } else {\n      name = unescapeSQLString(node.getChild(0).getText());\n    }\n\n    try {\n      return (Class<? extends RecordReader>) Class.forName(name, true,\n          JavaUtils.getClassLoader());\n    } catch (ClassNotFoundException e) {\n      throw new SemanticException(e);\n    }\n  }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 138,
+            "nl_len": 90,
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/parse/SemanticAnalyzer.java"
+        },
+        {
+            "prediction": 0.057609014213085175,
+            "code": "  public static long getLongVar(Configuration conf, ConfVars var) {\n    assert (var.valClass == Long.class);\n    return conf.getLong(var.varname, var.defaultLongVal);\n  }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 49,
+            "nl_len": 90,
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java"
+        }
+    ],
+    "q1": [
+        {
+            "prediction": 0.28571537137031555,
+            "code": "\t/**\n\t * Returns this StringValue's internal character data. The array might be larger than the string\n\t * which is currently stored in the StringValue.\n\t * \n\t * @return The character data.\n\t */\n\tpublic char[] getCharArray() {\n\t\treturn this.value;\n\t}",
+            "nl_input": "CopyableValue method to copy into new instance\nProvide a method for generic user-defined functions to clone a {{CopyableValue}}. A common use case is a {{GroupReduceFunction}} that needs to store multiple objects. With object reuse we need to make a deep copy and with type erasure we cannot call new.",
+            "code_len": 69,
+            "nl_len": 65,
+            "path": "flink-core/src/main/java/org/apache/flink/types/StringValue.java",
+            "evaluation": "No notable keywords."
+        },
+        {
+            "prediction": 0.2857496440410614,
+            "code": "    public void visit(Drop obj) {\n        preVisitVisitor(obj);\n        visitNode(obj.getTable());\n        postVisitVisitor(obj);\n    }",
+            "nl_input": "Add support for not null and auto increment for temp table columns\nIt would be good to have auto increment and not null support for temp tables.",
+            "code_len": 37,
+            "nl_len": 29,
+            "path": "engine/src/main/java/org/teiid/query/sql/navigator/PreOrPostOrderNavigator.java",
+            "evaluation": "No notable keywords."
+        },
+        {
+            "prediction": 0.2857773005962372,
+            "code": "    /**\n     * Return a List of translated parts ({@link LanguageObject}s and Objects), or null\n     * if to rely on the default translation. \n     * @param command\n     * @param context\n     * @return a list of translated parts\n     */\n    public List<?> translateCommand(Command command, ExecutionContext context) {\n    \treturn null;\n    }",
+            "nl_input": "Support Lateral join and procedure pushdown\nLateral joins of the form:\n\nselect ... from x inner join lateral (... x.col ...) as y on ...\n\nHave been supported for some time, but not the ability to push them to source.\n\nA highly related scenario is to be able to push procedures used directly or in lateral joins with the rest of their plan:\n\nselect ... from x inner join lateral (call proc(.. x.col ...)) as y on ...",
+            "code_len": 83,
+            "nl_len": 109,
+            "path": "connectors/translator-jdbc/src/main/java/org/teiid/translator/jdbc/JDBCExecutionFactory.java",
+            "evaluation": "No notable keywords and both inputs have specific keywords."
+        },
+        {
+            "prediction": 0.28578534722328186,
+            "code": "  /**\n   * @param auxJars the auxJars to set\n   */\n  public void setAuxJars(String auxJars) {\n    this.auxJars = auxJars;\n    setVar(this, ConfVars.HIVEAUXJARS, auxJars);\n  }",
+            "nl_input": "Implement bitmap indexing in Hive\nImplement bitmap index handler to complement compact indexing.",
+            "code_len": 70,
+            "nl_len": 15,
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java",
+            "evaluation": "No notable keywords and both inputs have specific keywords."
+        },
+        {
+            "prediction": 0.2857973575592041,
+            "code": "  private synchronized void setClusterId(final String nsCid, final String bpid\n      ) throws IOException {\n    if(clusterId != null && !clusterId.equals(nsCid)) {\n      throw new IOException (\"Cluster IDs not matched: dn cid=\" + clusterId \n          + \" but ns cid=\"+ nsCid + \"; bpid=\" + bpid);\n    }\n    // else\n    clusterId = nsCid;\n  }",
+            "nl_input": "Signal congestion on the DataNode\nThe DataNode should signal congestion (i.e. \"I'm too busy\") in the PipelineAck using the mechanism introduced in HDFS-7270.",
+            "code_len": 96,
+            "nl_len": 41,
+            "path": "hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/datanode/DataNode.java",
+            "evaluation": "No notable keywords and both inputs have specific keywords."
+        }
+    ],
+    "median": [
+        {
+            "prediction": 0.42632707953453064,
+            "code": "\tprivate void validateTextOptions(LanguageObject obj, Character delimiter,\n\t\t\tCharacter quote) {\n\t\tif (quote == null) {\n\t\t\tquote = '\"';\n\t\t} \n\t\tif (delimiter == null) {\n\t\t\tdelimiter = ',';\n\t\t}\n\t\tif (EquivalenceUtil.areEqual(quote, delimiter)) {\n\t\t\thandleValidationError(QueryPlugin.Util.getString(\"ValidationVisitor.text_table_delimiter\"), obj); //$NON-NLS-1$\n\t\t}\n\t\tif (EquivalenceUtil.areEqual(quote, '\\n') \n\t\t\t\t|| EquivalenceUtil.areEqual(delimiter, '\\n')) {\n\t\t\thandleValidationError(QueryPlugin.Util.getString(\"ValidationVisitor.text_table_newline\"), obj); //$NON-NLS-1$\n\t\t}\n\t}",
+            "nl_input": "RF: Add the ability to use DISTINCT in windowed aggregates in EDS\nAccording to the following page: http://docs.jboss.org/teiid/7.5.0.Final/reference/en-US/html_single/#window_functions\n\nThis states that \"windowed aggregates may not use DISTINCT\". I would like to request that use of DISTINCT in aggregate functions be  supported in a future release.\n",
+            "code_len": 182,
+            "nl_len": 93,
+            "path": "engine/src/main/java/org/teiid/query/validator/ValidationVisitor.java"
+        },
+        {
+            "prediction": 0.42634400725364685,
+            "code": "    public PrincipalPrivilegeSet get_table_privilege_set(final String dbName,\n        final String tableName, final String userName,\n        final List<String> groupNames) throws MetaException, TException {\n      incrementCounter(\"get_table_privilege_set\");\n\n      PrincipalPrivilegeSet ret = null;\n      try {\n        ret = getMS().getTablePrivilegeSet(dbName, tableName, userName,\n            groupNames);\n      } catch (MetaException e) {\n        throw e;\n      } catch (Exception e) {\n        throw new RuntimeException(e);\n      }\n      return ret;\n    }",
+            "nl_input": "Enable QOP configuration for Hive Server 2 thrift transport\nThe QoP for hive server 2 should be configurable to enable encryption. A new configuration should be exposed \"hive.server2.thrift.sasl.qop\". This would give greater control configuring hive server 2 service.",
+            "code_len": 138,
+            "nl_len": 57,
+            "path": "metastore/src/java/org/apache/hadoop/hive/metastore/HiveMetaStore.java"
+        },
+        {
+            "prediction": 0.42634478211402893,
+            "code": "\t\t\t\t@Override\n\t\t\t\tpublic void onCompletion(RecordMetadata metadata, Exception exception) {\n\t\t\t\t\tif (exception != null && asyncException == null) {\n\t\t\t\t\t\tasyncException = exception;\n\t\t\t\t\t}\n\t\t\t\t\tacknowledgeMessage();\n\t\t\t\t}",
+            "nl_input": "Add Rescalable Non-Partitioned State\nThis issue is associated with [FLIP-8| https://cwiki.apache.org/confluence/display/FLINK/FLIP-8%3A+Rescalable+Non-Partitioned+State].",
+            "code_len": 58,
+            "nl_len": 54,
+            "path": "flink-streaming-connectors/flink-connector-kafka-base/src/main/java/org/apache/flink/streaming/connectors/kafka/FlinkKafkaProducerBase.java"
+        },
+        {
+            "prediction": 0.42636218667030334,
+            "code": "  @Override\n  public String[] getMasterCoprocessors() {\n    try {\n      return getClusterStatus().getMasterCoprocessors();\n    } catch (IOException e) {\n      LOG.error(\"Could not getClusterStatus()\",e);\n      return null;\n    }\n  }",
+            "nl_input": "Shell tool to clear compaction queues\nscenario\uff1a\n1. Compact a table by mistake\n2. Compact is not completed within the specified time period\n\nIn this case, clearing the queue is a better choice, so as not to affect the stability of the cluster",
+            "code_len": 68,
+            "nl_len": 55,
+            "path": "hbase-client/src/main/java/org/apache/hadoop/hbase/client/HBaseAdmin.java"
+        },
+        {
+            "prediction": 0.4263705313205719,
+            "code": "\t/**\n\t * Applies an aggregation that that gives the current sum of the pojo data\n\t * stream at the given field expressionby the given key. An independent\n\t * aggregate is kept per key. A field expression is either the name of a\n\t * public field or a getter method with parentheses of the\n\t * {@link DataStream}S underlying type. A dot can be used to drill down into\n\t * objects, as in {@code \"field1.getInnerField2()\" }.\n\t *\n\t * @param field\n\t *            The field expression based on which the aggregation will be\n\t *            applied.\n\t * @return The transformed DataStream.\n\t */\n\tpublic SingleOutputStreamOperator<T> sum(String field) {\n\t\treturn aggregate(new SumAggregator<>(field, getType(), getExecutionConfig()));\n\t}",
+            "nl_input": "Add an interface for Time aware User Functions\nI suggest to add an interface that UDFs can implement, which will let them be notified upon watermark updates.\n\nExample usage:\n{code}\npublic interface EventTimeFunction {\n    void onWatermark(Watermark watermark);\n}\n\npublic class MyMapper implements MapFunction, EventTimeFunction {\n\n    private long currentEventTime = Long.MIN_VALUE;\n\n    public String map(String value) {\n        return value + \" @ \" + currentEventTime;\n    }\n\n    public void onWatermark(Watermark watermark) {\n        currentEventTime = watermark.getTimestamp();\n    }\n}\n{code}",
+            "code_len": 185,
+            "nl_len": 145,
+            "path": "flink-streaming-java/src/main/java/org/apache/flink/streaming/api/datastream/KeyedStream.java"
+        }
+    ],
+    "q3": [
+        {
+            "prediction": 0.5946089029312134,
+            "code": "    private void validateXMLQuery(Query obj) {\n        if(obj.getGroupBy() != null) {\n            handleValidationError(QueryPlugin.Util.getString(\"ERR.015.012.0031\"), obj); //$NON-NLS-1$\n        }\n        if(obj.getHaving() != null) {\n            handleValidationError(QueryPlugin.Util.getString(\"ERR.015.012.0032\"), obj); //$NON-NLS-1$\n        }\n        if(obj.getLimit() != null) {\n            handleValidationError(QueryPlugin.Util.getString(\"ValidationVisitor.limit_not_valid_for_xml\"), obj); //$NON-NLS-1$\n        }\n        if (obj.getOrderBy() != null) {\n        \tOrderBy orderBy = obj.getOrderBy();\n        \tfor (OrderByItem item : orderBy.getOrderByItems()) {\n\t\t\t\tif (!(item.getSymbol() instanceof ElementSymbol)) {\n\t\t\t\t\thandleValidationError(QueryPlugin.Util.getString(\"ValidationVisitor.orderby_expression_xml\"), obj); //$NON-NLS-1$\n\t\t\t\t}\n\t\t\t}\n         }\n    }",
+            "nl_input": "RF: Add the ability to use DISTINCT in windowed aggregates in EDS\nAccording to the following page: http://docs.jboss.org/teiid/7.5.0.Final/reference/en-US/html_single/#window_functions\n\nThis states that \"windowed aggregates may not use DISTINCT\". I would like to request that use of DISTINCT in aggregate functions be  supported in a future release.\n",
+            "code_len": 252,
+            "nl_len": 93,
+            "path": "engine/src/main/java/org/teiid/query/validator/ValidationVisitor.java"
+        },
+        {
+            "prediction": 0.5946422219276428,
+            "code": "    @Override\n    public ComponentModel getComponent() {\n        return (ComponentModel)getModelParent();\n    }",
+            "nl_input": "Transformer Configuration: Step 1\nWe need the following configuration support for Transformers as part of Step 1:\n1)  section in switchyard.xml, which allows individual  elements for each transform.\n2) Add capability to the configuratior plugin which, as part of Step 2,  will use a Scanner to scan the project structure and creates configuration entries for declared (using annotations, etc.) transformers\n",
+            "code_len": 24,
+            "nl_len": 87,
+            "path": "config/src/main/java/org/switchyard/config/model/composite/v1/V1ComponentImplementationModel.java"
+        },
+        {
+            "prediction": 0.5946754813194275,
+            "code": "\tprivate static <T> RecordWriterOutput<T> createStreamOutput(\n\t\t\tStreamEdge edge, StreamConfig upStreamConfig, int outputIndex,\n\t\t\tEnvironment taskEnvironment, boolean withTimestamps,\n\t\t\tAccumulatorRegistry.Reporter reporter, String taskName)\n\t{\n\t\tTypeSerializer<T> outSerializer = upStreamConfig.getTypeSerializerOut(taskEnvironment.getUserClassLoader());\n\n\t\t@SuppressWarnings(\"unchecked\")\n\t\tStreamPartitioner<T> outputPartitioner = (StreamPartitioner<T>) edge.getPartitioner();\n\n\t\tLOG.debug(\"Using partitioner {} for output {} of task \", outputPartitioner, outputIndex, taskName);\n\t\t\n\t\tResultPartitionWriter bufferWriter = taskEnvironment.getWriter(outputIndex);\n\n\t\tStreamRecordWriter<SerializationDelegate<StreamRecord<T>>> output = \n\t\t\t\tnew StreamRecordWriter<>(bufferWriter, outputPartitioner, upStreamConfig.getBufferTimeout());\n\t\toutput.setReporter(reporter);\n\t\toutput.setMetricGroup(taskEnvironment.getMetricGroup().getIOMetricGroup());\n\t\t\n\t\treturn new RecordWriterOutput<T>(output, outSerializer, withTimestamps);\n\t}",
+            "nl_input": "Add Rescalable Non-Partitioned State\nThis issue is associated with [FLIP-8| https://cwiki.apache.org/confluence/display/FLINK/FLIP-8%3A+Rescalable+Non-Partitioned+State].",
+            "code_len": 260,
+            "nl_len": 54,
+            "path": "flink-streaming-java/src/main/java/org/apache/flink/streaming/runtime/tasks/OperatorChain.java"
+        },
+        {
+            "prediction": 0.5947297215461731,
+            "code": "  /*\n   * @param wantedVersions How many versions were asked for.\n   * @return wantedVersions or this families' {@link HConstants#VERSIONS}.\n   */\n  int versionsToReturn(final int wantedVersions) {\n    if (wantedVersions <= 0) {\n      throw new IllegalArgumentException(\"Number of versions must be > 0\");\n    }\n    // Make sure we do not return more than maximum versions for this store.\n    int maxVersions = this.family.getMaxVersions();\n    return wantedVersions > maxVersions ? maxVersions: wantedVersions;\n  }",
+            "nl_input": "Allow CF to retain deleted rows\nParent allows for a cluster to retain rows for a TTL or keep a minimum number of versions.\nHowever, if a client deletes a row all version older than the delete tomb stone will be remove at the next major compaction (and even at memstore flush - see HBASE-4241).\nThere should be a way to retain those version to guard against software error.\n\nI see two options here:\n1. Add a new flag HColumnDescriptor. Something like \"RETAIN_DELETED\".\n2. Folds this into the parent change. I.e. keep minimum-number-of-versions of versions even past the delete marker.\n\n#1 would allow for more flexibility. #2 comes somewhat naturally with parent (from a user viewpoint)\n\nComments? Any other options?",
+            "code_len": 126,
+            "nl_len": 179,
+            "path": "src/main/java/org/apache/hadoop/hbase/regionserver/Store.java"
+        },
+        {
+            "prediction": 0.5947679877281189,
+            "code": "  private BlockInfo completeBlock(final BlockCollection bc,\n      final BlockInfo block, boolean force) throws IOException {\n    BlockInfo[] fileBlocks = bc.getBlocks();\n    for(int idx = 0; idx < fileBlocks.length; idx++)\n      if(fileBlocks[idx] == block) {\n        return completeBlock(bc, idx, force);\n      }\n    return block;\n  }",
+            "nl_input": "Admin command to track file and locations from block id\nA dfsadmin command that allows finding out the file and the locations given a block number will be very useful in debugging production issues.   It may be possible to add this feature to Fsck, instead of creating a new command.\n",
+            "code_len": 92,
+            "nl_len": 58,
+            "path": "hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/blockmanagement/BlockManager.java"
+        }
+    ],
+    "highest": [
+        {
+            "prediction": 0.9487757086753845,
+            "code": "    public void prepare()\n    {\n        Configuration config = archivaConfiguration.getConfiguration();\n        \n        repositoryGroup = new RepositoryGroupConfiguration();\n        repositoryGroups = config.getRepositoryGroupsAsMap();\n        managedRepositories = config.getManagedRepositoriesAsMap();\n        groupToRepositoryMap = config.getGroupToRepositoryMap();\n    }",
+            "nl_input": "Virtual repositories or repository grouping\nA number of managed repositories can  be grouped together with that group having only one url. So you only need to specify that url in the settings.xml file and when Archiva receives a request via that url, it would look for that artifact from the repositories belonging to that group. \n\nMore details are dicussed here:\nhttp://www.nabble.com/Archiva-1.1-Roadmap-td15262645.html#a15263879",
+            "code_len": 73,
+            "nl_len": 111,
+            "path": "archiva-modules/archiva-web/archiva-webapp/src/main/java/org/apache/maven/archiva/web/action/admin/repositories/RepositoryGroupsAction.java",
+            "evaluation": "Common keywords: 'repository', 'group', 'archiva'"
+        },
+        {
+            "prediction": 0.9489997029304504,
+            "code": "        @Override\n        public void accept(StatisticsData data) {\n          total.add(data);\n        }",
+            "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
+            "code_len": 25,
+            "nl_len": 211,
+            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java",
+            "evaluation":"Common keywords: 'statistics'. Short method. 'add' or 'accept' could be interpreted as part of the 'append' operation described."
+        },
+        {
+            "prediction": 0.9506540894508362,
+            "code": "        @Override\n        public void accept(StatisticsData data) {\n          bytesWritten += data.bytesWritten;\n        }",
+            "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
+            "code_len": 27,
+            "nl_len": 211,
+            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java",
+            "evaluation":"Common keywords: 'statistics'. Short method. 'accept' could be interpreted as part of the 'append' operation described."
+        },
+        {
+            "prediction": 0.9529407620429993,
+            "code": "    @Override\n    public TProcessor getProcessor(TTransport trans) {\n      try {\n        Iface handler = new HiveServerHandler();\n        return new ThriftHive.Processor(handler);\n      } catch (Exception e) {\n        throw new RuntimeException(e);\n      }\n    }",
+            "nl_input": "Create a Hive CLI that connects to hive ThriftServer\nWe should have an alternate CLI that works by interacting with the HiveServer, in this way it will be ready when/if we deprecate the current CLI.",
+            "code_len": 66,
+            "nl_len": 46,
+            "path": "service/src/java/org/apache/hadoop/hive/service/HiveServer.java",
+            "evaluation":"Common keywords: 'Hive', 'thrift', 'server'"
+        },
+        {
+            "prediction": 0.9577432870864868,
+            "code": "\t@Override\n    /**\n     * Get string for display purposes \n     * @see java.lang.Object#toString()\n     * @since 6.1\n     */\n    public String toString() {\n        StringBuffer str = new StringBuffer();\n        \n        str.append(this.getIdentifier() + \" ConnectionPoolStats:\\n\"); //$NON-NLS-1$\n        str.append(\"\\tisXAPoolType = \" + isXAPoolType()); //$NON-NLS-1$\n        str.append(\"\\ttotalConnections = \" + this.totalConnections); //$NON-NLS-1$\n        str.append(\"\\tinUseConnections = \" + this.connectionInUse); //$NON-NLS-1$\n        str.append(\"\\twaitingConnections = \" + connectionsWaiting);     //$NON-NLS-1$\n        str.append(\"\\tconnectionsCreated = \" + connectionsCreated);     //$NON-NLS-1$\n        str.append(\"\\tconnectionsDestroyed = \" + connectionsDestroyed);     //$NON-NLS-1$\n        return str.toString();\n    }",
+            "nl_input": "Add ability to monitor Connector Connection Pool \nHere are the discussed changes to enable connection pool monitoring:\n\n-   Create a new stat's class to expose the information: ConnectionPoolStats\n-   Enable the ConnectionPool to monitor the following pieces of information:\n\n\na.   Total Connections  - Total Number of Connections for the Connection Pool\nb   Available Connections  - Number of available connections in the connection pool.\nc   Active Connections - Number of Connections currently supporting clients.\nd   Connections Created - Number of Connections created since the Connection Pool was created.\ne  Connections Destroyed  -     Number of Connections destroyed since the Connection Pool was created. \n\nIn the config.xml for the base Connector component type\n\na.  Rename the ConnectorMaxThreads to MaxConnections so that it\nrelates better to the user\n\n\n\n\n-  Expose the ConnectionPoolStats out the adminAPI\n",
+            "code_len": 233,
+            "nl_len": 202,
+            "path": "client/src/main/java/com/metamatrix/admin/objects/MMConnectionPool.java",
+            "evaluation":"Common keywords: 'connection', 'pool', 'stat' (concatenation of these three occurs in both code and NL input), 'connection'. Keywords occur often in both inputs. In both inputs mention of total, creation, destroy, and in use/active connections. Method does look like a logger to monitor the connection pool. "
+        }
+    ]
+}

@@ -1,0 +1,222 @@
+{
+    "lowest": [
+        {
+            "prediction": 0.09972048550844193,
+            "code": "    public boolean isInputFileChanged() {\n      return inputFileChanged;\n    }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 18,
+            "nl_len": 90,
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/exec/ExecMapper.java",
+            "evaluation": "All the same issue and short methods. Only common keyword over this issue: 'input'"
+        },
+        {
+            "prediction": 0.10144693404436111,
+            "code": "  private NodeProcessor getDefaultProc() {\n    return new NodeProcessor() {\n      @Override\n      public Object process(Node nd, Stack<Node> stack,\n          NodeProcessorCtx procCtx, Object... nodeOutputs)\n          throws SemanticException {\n        return null;\n      }\n    };\n  }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 68,
+            "nl_len": 90,
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/optimizer/SortedMergeBucketMapJoinOptimizer.java"
+        },
+        {
+            "prediction": 0.10871098935604095,
+            "code": "    public String getCurrentInputFile() {\n      return currentInputFile;\n    }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 16,
+            "nl_len": 90,
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/exec/ExecMapper.java"
+        },
+        {
+            "prediction": 0.11479968577623367,
+            "code": "    /**\n     * @return the oldMapJoin\n     */\n    public AbstractMapJoinOperator<? extends MapJoinDesc> getOldMapJoin() {\n      return oldMapJoin;\n    }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 43,
+            "nl_len": 90,
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/optimizer/GenMRProcContext.java",
+            "evaluation": "All the same issue. Only common keyword over this prompt: 'mapjoin'"
+        },
+        {
+            "prediction": 0.1152932420372963,
+            "code": "    public void setJc(JobConf jc) {\n      this.jc = jc;\n    }",
+            "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
+            "code_len": 24,
+            "nl_len": 90,
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/exec/ExecMapper.java"
+        }
+    ],
+    "q1": [
+        {
+            "prediction": 0.46813079714775085,
+            "code": "  @Override\n  public Character[] getEmptyArray() {\n    return new Character[0];\n  }",
+            "nl_input": "LinkedHashSet not supported\nNULL",
+            "code_len": 24,
+            "nl_len": 6,
+            "path": "errai-marshalling/src/main/java/org/jboss/errai/marshalling/client/marshallers/CharacterMarshaller.java",
+            "evaluation": "Minimal information in both code and NL"
+        },
+        {
+            "prediction": 0.46847137808799744,
+            "code": "    @Override\n    public long getBatchTimeout() {\n        return Long.parseLong(getModelAttribute(JCAConstants.BATCH_TIMEOUT));\n    }",
+            "nl_input": "Support batch processing on JCA inbound\nSince JCA message inflow creates a transaction for every message, one project I have got involved before, experienced performance problem on their ESB like framework. We solved it with receiving multiple messages in one transaction.\n\nIt would be great if we add similar to the SwitchYard like following:\nhttps://gist.github.com/3876644\n\nKeith suggested that we may be able to have this as a common component library or core extension so we can use this feature not only on JCA but on other components.",
+            "code_len": 33,
+            "nl_len": 119,
+            "path": "jca/src/main/java/org/switchyard/component/jca/config/model/v1/V1BatchCommitModel.java",
+            "evaluation": "Common keywords: 'JCA', 'batch'"
+        },
+        {
+            "prediction": 0.46866920590400696,
+            "code": "\t\t/**\n\t\t * 2) Open CheckpointStateOutputStream through the checkpointStreamFactory into which we will write.\n\t\t *\n\t\t * @throws Exception\n\t\t */\n\t\tpublic void openCheckpointStream() throws Exception {\n\t\t\tPreconditions.checkArgument(outStream == null, \"Output stream for snapshot is already set.\");\n\t\t\toutStream = checkpointStreamFactory.\n\t\t\t\t\tcreateCheckpointStateOutputStream(checkpointId, checkpointTimeStamp);\n\t\t\tstateBackend.cancelStreamRegistry.registerClosable(outStream);\n\t\t\toutputView = new DataOutputViewStreamWrapper(outStream);\n\t\t}",
+            "nl_input": "Add Rescalable Non-Partitioned State\nThis issue is associated with [FLIP-8| https://cwiki.apache.org/confluence/display/FLINK/FLIP-8%3A+Rescalable+Non-Partitioned+State].",
+            "code_len": 127,
+            "nl_len": 54,
+            "path": "flink-contrib/flink-statebackend-rocksdb/src/main/java/org/apache/flink/contrib/streaming/state/RocksDBKeyedStateBackend.java",
+            "evaluation": "Common keywords: 'state'"
+        },
+        {
+            "prediction": 0.46887925267219543,
+            "code": "  /** Get the error string */\n  public String getError() { return datum.error.toString(); }",
+            "nl_input": "Modify JobHistory to use Avro for serialization instead of raw JSON\nMAPREDUCE-157 modifies JobHistory to log events using Json Format.  This can be modified to use Avro instead. ",
+            "code_len": 22,
+            "nl_len": 42,
+            "path": "src/java/org/apache/hadoop/mapreduce/jobhistory/TaskAttemptUnsuccessfulCompletionEvent.java",
+            "evaluation": "Very generic method"
+        },
+        {
+            "prediction": 0.46922293305397034,
+            "code": "  public static boolean isAmbiguous(final Class<?> type, final Annotation... qualifiers) {\n    return IOC.getBeanManager().lookupBeans(type, qualifiers).size() > 1;\n  }",
+            "nl_input": "Migrate IOCUtil functionality from kie-wb-common into errai-ioc as enhanced version of Instance<T>\nThe [IOCUtil class|https://github.com/droolsjbpm/kie-wb-common/blob/master/kie-wb-common-screens/kie-wb-common-server-ui/kie-wb-common-server-ui-client/src/main/java/org/kie/workbench/common/screens/server/management/client/util/IOCUtil.java] in kie-wb-common provides useful functionality for properly managing lifecycles of dynamically created beans.\r\n\r\nThis functionality should be incorporated into errai-ioc with a similar API as Instance, except  that beans created through this new managed instance will be automatically destroyed via a disposer. See [here|https://github.com/uberfire/uberfire/pull/395#issuecomment-226521822] for suggestions.",
+            "code_len": 41,
+            "nl_len": 214,
+            "path": "errai-ioc/src/main/java/org/jboss/errai/ioc/client/IOCUtil.java",
+            "evaluation": "Common keywords: 'beans'"
+        }
+    ],
+    "median": [
+        {
+            "prediction": 0.6691125631332397,
+            "code": "\tpublic void setVDBRepository(VDBRepository repo) {\n\t\tthis.vdbRepository = repo;\n\t}",
+            "nl_input": "Provide a solution to  'merge' two VDBs\nBased on the conversation on this thread\n\nhttp://lists.jboss.org/pipermail/teiid-designer-dev/2010-March/000212.html\n\nTeiid and Designer needs a mechanism, where child VDB can be merged into parent VDB. Designer can use this mechanism to  provide the preview functionality.",
+            "code_len": 28,
+            "nl_len": 85,
+            "path": "jboss-integration/src/main/java/org/teiid/jboss/deployers/RuntimeEngineDeployer.java"
+        },
+        {
+            "prediction": 0.6696199178695679,
+            "code": "  @Override\n  @QosPriority(priority=HIGH_QOS)\n  public GetRegionInfoResponse getRegionInfo(final RpcController controller,\n      final GetRegionInfoRequest request) throws ServiceException {\n    try {\n      checkOpen();\n      requestCount.incrementAndGet();\n      HRegion region = getRegion(request.getRegion());\n      HRegionInfo info = region.getRegionInfo();\n      GetRegionInfoResponse.Builder builder = GetRegionInfoResponse.newBuilder();\n      builder.setRegionInfo(HRegionInfo.convert(info));\n      if (request.hasCompactionState() && request.getCompactionState()) {\n        builder.setCompactionState(\n          CompactionRequest.getCompactionState(info.getRegionId()));\n      }\n      return builder.build();\n    } catch (IOException ie) {\n      throw new ServiceException(ie);\n    }\n  }",
+            "nl_input": "Adding some fuction to check if a table/region is in compaction\nThis feature will be helpful to find out if a major compaction is going on.\nWe can show if it is in any minor compaction too.",
+            "code_len": 194,
+            "nl_len": 44,
+            "path": "src/main/java/org/apache/hadoop/hbase/regionserver/HRegionServer.java"
+        },
+        {
+            "prediction": 0.6698753833770752,
+            "code": "  @Override\n  public void removeXAttr(Path p, String name) throws IOException {\n    statistics.incrementWriteOps(1);\n    storageStatistics.incrementOpCounter(OpType.REMOVE_XATTR);\n    final HttpOpParam.Op op = PutOpParam.Op.REMOVEXATTR;\n    new FsPathRunner(op, p, new XAttrNameParam(name)).run();\n  }",
+            "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
+            "code_len": 90,
+            "nl_len": 211,
+            "path": "hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/web/WebHdfsFileSystem.java"
+        },
+        {
+            "prediction": 0.6700081825256348,
+            "code": "  public static String getProcessPID() {\n    return ManagementFactory.getRuntimeMXBean().getName().split(\"@\")[0];\n  }",
+            "nl_input": "Add page displaying JVM process metrics\nIt would be useful to have page displaying some JVM metrics like PID, process owner. threads info, GC info, etc. This ticked will create two jsp pages (for master and rs) displaying stats listed above. \n -  ",
+            "code_len": 29,
+            "nl_len": 55,
+            "path": "hbase-server/src/main/java/org/apache/hadoop/hbase/util/JSONMetricUtil.java"
+        },
+        {
+            "prediction": 0.6702037453651428,
+            "code": "  @Override\n  public void deleteSnapshot(final Path path, final String snapshotName)\n      throws IOException {\n    statistics.incrementWriteOps(1);\n    storageStatistics.incrementOpCounter(OpType.DELETE_SNAPSHOT);\n    final HttpOpParam.Op op = DeleteOpParam.Op.DELETESNAPSHOT;\n    new FsPathRunner(op, path, new SnapshotNameParam(snapshotName)).run();\n  }",
+            "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
+            "code_len": 93,
+            "nl_len": 211,
+            "path": "hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/web/WebHdfsFileSystem.java"
+        }
+    ],
+    "q3": [
+        {
+            "prediction": 0.8166685104370117,
+            "code": "\t/**\n\t * Sends the given message to all vertices that adjacent to the changed vertex.\n\t * This method is mutually exclusive to the method {@link #getEdges()} and may be called only once.\n\t * \n\t * @param m The message to send.\n\t */\n\tpublic final void sendMessageToAllNeighbors(Message m) {\n\t\tverifyEdgeUsage();\n\t\toutMsg.setField(m, 1);\n\t\twhile (edges.hasNext()) {\n\t\t\tTuple next = (Tuple) edges.next();\n\t\t\toutMsg.setField(next.getField(1), 0);\n\t\t\tout.collect(Either.Right(outMsg));\n\t\t}\n\t}",
+            "nl_input": "Add a Pregel iteration abstraction to Gelly\nThis issue proposes to add a Pregel/Giraph-like iteration abstraction to Gelly that will only expose one UDF to the user, {{compute()}}. {{compute()}} will have access to both the vertex state and the incoming messages, and will be able to produce messages and update the vertex value.",
+            "code_len": 153,
+            "nl_len": 76,
+            "path": "flink-libraries/flink-gelly/src/main/java/org/apache/flink/graph/pregel/ComputeFunction.java"
+        },
+        {
+            "prediction": 0.8167292475700378,
+            "code": "  @Override\n  public ContentSummary getContentSummary(Path f) throws IOException {\n    statistics.incrementReadOps(1);\n    storageStatistics.incrementOpCounter(OpType.GET_CONTENT_SUMMARY);\n    Path absF = fixRelativePart(f);\n    return new FileSystemLinkResolver<ContentSummary>() {\n      @Override\n      public ContentSummary doCall(final Path p) throws IOException {\n        return dfs.getContentSummary(getPathName(p));\n      }\n      @Override\n      public ContentSummary next(final FileSystem fs, final Path p)\n          throws IOException {\n        return fs.getContentSummary(p);\n      }\n    }.resolve(this, absF);\n  }",
+            "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
+            "code_len": 154,
+            "nl_len": 211,
+            "path": "hadoop-hdfs-project/hadoop-hdfs-client/src/main/java/org/apache/hadoop/hdfs/DistributedFileSystem.java"
+        },
+        {
+            "prediction": 0.8169400691986084,
+            "code": "\t@Override\n\tpublic V get() {\n\t\treturn stateTable.get(currentNamespace);\n\t}",
+            "nl_input": "Asynchronous snapshotting for HeapKeyedStateBackend\nBlocking snapshots render the HeapKeyedStateBackend practically unusable for many user in productions. Their jobs can not tolerate stopped processing for the time it takes to write gigabytes of data from memory to disk. Asynchronous snapshots would be a solution to this problem. The challenge for the implementation is coming up with a copy-on-write scheme for the in-memory hash maps that build the foundation of this backend. After taking a closer look, this problem is twofold. First, providing CoW semantics for the hashmap itself, as a mutible structure, thereby avoiding costly locking or blocking where possible. Second, CoW for the mutable value objects, e.g. through cloning via serializers.  ",
+            "code_len": 25,
+            "nl_len": 165,
+            "path": "flink-runtime/src/main/java/org/apache/flink/runtime/state/heap/HeapReducingState.java"
+        },
+        {
+            "prediction": 0.8173701763153076,
+            "code": "    /**\n     * Process the newly discovered artifacts in the repository. Generate feeds for new artifacts in the repository and\n     * new versions of artifact.\n     */\n    public void process( List<ArchivaArtifact> data )\n    {\n        log.debug( \"Process new artifacts into rss feeds.\" );\n        \n        if ( System.getProperty( \"jetty.host\" ) != null )\n        {\n            host = System.getProperty( \"jetty.host\" );\n        }\n        \n        if ( System.getProperty( \"jetty.port\" ) != null )\n        {\n            port = System.getProperty( \"jetty.port\" );\n        }\n        \n        processNewArtifactsInRepo( data );\n        processNewVersionsOfArtifact( data );\n    }",
+            "nl_input": "add RSS view to repository manager\npossibly needs a new component in JIRA. Items that could have RSS:\n- a particular search\n- preset for \"latest added\" artifacts\n- preset for \"new versions\" of artifacts\n- preset for \"new artifacts from a given sync partner\"",
+            "code_len": 171,
+            "nl_len": 60,
+            "path": "archiva-modules/archiva-web/archiva-rss/src/main/java/org/apache/archiva/rss/processor/NewArtifactsRssFeedProcessor.java"
+        },
+        {
+            "prediction": 0.8178033232688904,
+            "code": "  @Override\n  public void setInput(byte[] b, int off, int len) {\n    if (b == null) {\n      throw new NullPointerException();\n    }\n    if (off < 0 || len < 0 || off > b.length - len) {\n      throw new ArrayIndexOutOfBoundsException();\n    }\n\n    this.userBuf = b;\n    this.userBufOff = off;\n    this.userBufLen = len;\n    uncompressedDirectBufOff = 0;\n    setInputFromSavedData();\n\n    compressedDirectBuf.limit(directBufferSize);\n    compressedDirectBuf.position(directBufferSize);\n  }",
+            "nl_input": "Add Codec for ZStandard Compression\nZStandard: https://github.com/facebook/zstd has been used in production for 6 months by facebook now.  v1.0 was recently released.  Create a codec for this library.  ",
+            "code_len": 142,
+            "nl_len": 51,
+            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/io/compress/zstd/ZStandardCompressor.java"
+        }
+    ],
+    "highest": [
+        {
+            "prediction": 0.9681122303009033,
+            "code": "  /**\n   * Get the type of {@link Compressor} needed by this {@link CompressionCodec}.\n   *\n   * @return the type of compressor needed by this codec.\n   */\n  @Override\n  public Class<? extends Compressor> getCompressorType() {\n    if (!isNativeSnappyLoaded(conf)) {\n      throw new RuntimeException(\"native snappy library not available\");\n    }\n\n    return SnappyCompressor.class;\n  }",
+            "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
+            "code_len": 102,
+            "nl_len": 176,
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java",
+            "evaluation": "All of these are from the same issue, but it seems that 'Snappy' is a very recognisable keyword that makes this an easy case. Other common keywords: '(de)compress'"
+        },
+        {
+            "prediction": 0.9681482911109924,
+            "code": "  public String getDefaultExtension() {\n    return \".snappy\";\n  }",
+            "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
+            "code_len": 17,
+            "nl_len": 176,
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java"
+        },
+        {
+            "prediction": 0.968238353729248,
+            "code": "  /**\n   * Get the type of {@link Decompressor} needed by this {@link CompressionCodec}.\n   *\n   * @return the type of decompressor needed by this codec.\n   */\n  @Override\n  public Class<? extends Decompressor> getDecompressorType() {\n    if (!isNativeSnappyLoaded(conf)) {\n      throw new RuntimeException(\"native snappy library not available\");\n    }\n\n    return SnappyDecompressor.class;\n  }",
+            "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
+            "code_len": 105,
+            "nl_len": 176,
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java"
+        },
+        {
+            "prediction": 0.9685814380645752,
+            "code": "  public Class<? extends Decompressor> getDecompressorType() {\n    if (!isNativeSnappyLoaded(conf)) {\n      throw new RuntimeException(\"native-snappy library not available\");\n    }\n    return SnappyDecompressor.class;\n  }",
+            "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
+            "code_len": 57,
+            "nl_len": 176,
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java",
+            "evaluation": "Common keywords: 'snappy', '(de)compress', 'library'"
+        },
+        {
+            "prediction": 0.969407320022583,
+            "code": "  public Class<? extends Compressor> getCompressorType() {\n    if (!isNativeSnappyLoaded(conf)) {\n      throw new RuntimeException(\"native-snappy library not available\");\n    }\n    return SnappyCompressor.class;\n  }",
+            "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
+            "code_len": 55,
+            "nl_len": 176,
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java",
+            "evaluation": "Common keywords: 'snappy', '(de)compress', 'library'"
+        }
+    ]
+}
