@@ -280,7 +280,6 @@ def plot_distribution_percentage(output_dir, predictions):
     ax2.set_xlabel("Number of Items")
 
     ax.set_xlabel("Percentage of Total Items (%)")
-    ax.set_title("Distribution of Confidence Scores")
 
     ax.set_ylim(-2, 1.5)
     plt.savefig(
@@ -519,7 +518,7 @@ def main():
 
     root = Path(args.root)
 
-    # plot_auprc(root)
+    plot_auprc(root)
 
     input_path = root.joinpath(args.model_results)
     with input_path.open("r", encoding="utf-8") as f:
@@ -529,10 +528,10 @@ def main():
     with data_path.open("r", encoding="utf-8") as f:
         data_file = json.load(f)
 
-    # plot_prc(root, input_file["predictions_mult"], input_file["labels"])
+    plot_prc(root, input_file["predictions_mult"], input_file["labels"])
     plot_separate_distributions(root, input_file)
-    # plot_distribution_percentage(root, input_file["predictions_mult"])
-    # token_len_analysis(root, input_file, data_file)
+    plot_distribution_percentage(root, input_file["predictions_mult"])
+    token_len_analysis(root, input_file, data_file)
 
 
 if __name__ == "__main__":
