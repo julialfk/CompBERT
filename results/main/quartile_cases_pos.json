@@ -6,8 +6,7 @@
             "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
             "code_len": 18,
             "nl_len": 90,
-            "path": "ql/src/java/org/apache/hadoop/hive/ql/exec/ExecMapper.java",
-            "evaluation": "All the same issue and short methods. Only common keyword over this issue: 'input'"
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/exec/ExecMapper.java"
         },
         {
             "prediction": 0.10144693404436111,
@@ -31,8 +30,7 @@
             "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
             "code_len": 43,
             "nl_len": 90,
-            "path": "ql/src/java/org/apache/hadoop/hive/ql/optimizer/GenMRProcContext.java",
-            "evaluation": "All the same issue. Only common keyword over this prompt: 'mapjoin'"
+            "path": "ql/src/java/org/apache/hadoop/hive/ql/optimizer/GenMRProcContext.java"
         },
         {
             "prediction": 0.1152932420372963,
@@ -50,8 +48,7 @@
             "nl_input": "LinkedHashSet not supported\nNULL",
             "code_len": 24,
             "nl_len": 6,
-            "path": "errai-marshalling/src/main/java/org/jboss/errai/marshalling/client/marshallers/CharacterMarshaller.java",
-            "evaluation": "Minimal information in both code and NL"
+            "path": "errai-marshalling/src/main/java/org/jboss/errai/marshalling/client/marshallers/CharacterMarshaller.java"
         },
         {
             "prediction": 0.46847137808799744,
@@ -59,8 +56,7 @@
             "nl_input": "Support batch processing on JCA inbound\nSince JCA message inflow creates a transaction for every message, one project I have got involved before, experienced performance problem on their ESB like framework. We solved it with receiving multiple messages in one transaction.\n\nIt would be great if we add similar to the SwitchYard like following:\nhttps://gist.github.com/3876644\n\nKeith suggested that we may be able to have this as a common component library or core extension so we can use this feature not only on JCA but on other components.",
             "code_len": 33,
             "nl_len": 119,
-            "path": "jca/src/main/java/org/switchyard/component/jca/config/model/v1/V1BatchCommitModel.java",
-            "evaluation": "Common keywords: 'JCA', 'batch'"
+            "path": "jca/src/main/java/org/switchyard/component/jca/config/model/v1/V1BatchCommitModel.java"
         },
         {
             "prediction": 0.46866920590400696,
@@ -68,8 +64,7 @@
             "nl_input": "Add Rescalable Non-Partitioned State\nThis issue is associated with [FLIP-8| https://cwiki.apache.org/confluence/display/FLINK/FLIP-8%3A+Rescalable+Non-Partitioned+State].",
             "code_len": 127,
             "nl_len": 54,
-            "path": "flink-contrib/flink-statebackend-rocksdb/src/main/java/org/apache/flink/contrib/streaming/state/RocksDBKeyedStateBackend.java",
-            "evaluation": "Common keywords: 'state'"
+            "path": "flink-contrib/flink-statebackend-rocksdb/src/main/java/org/apache/flink/contrib/streaming/state/RocksDBKeyedStateBackend.java"
         },
         {
             "prediction": 0.46887925267219543,
@@ -77,8 +72,7 @@
             "nl_input": "Modify JobHistory to use Avro for serialization instead of raw JSON\nMAPREDUCE-157 modifies JobHistory to log events using Json Format.  This can be modified to use Avro instead. ",
             "code_len": 22,
             "nl_len": 42,
-            "path": "src/java/org/apache/hadoop/mapreduce/jobhistory/TaskAttemptUnsuccessfulCompletionEvent.java",
-            "evaluation": "Very generic method"
+            "path": "src/java/org/apache/hadoop/mapreduce/jobhistory/TaskAttemptUnsuccessfulCompletionEvent.java"
         },
         {
             "prediction": 0.46922293305397034,
@@ -86,8 +80,7 @@
             "nl_input": "Migrate IOCUtil functionality from kie-wb-common into errai-ioc as enhanced version of Instance<T>\nThe [IOCUtil class|https://github.com/droolsjbpm/kie-wb-common/blob/master/kie-wb-common-screens/kie-wb-common-server-ui/kie-wb-common-server-ui-client/src/main/java/org/kie/workbench/common/screens/server/management/client/util/IOCUtil.java] in kie-wb-common provides useful functionality for properly managing lifecycles of dynamically created beans.\r\n\r\nThis functionality should be incorporated into errai-ioc with a similar API as Instance, except  that beans created through this new managed instance will be automatically destroyed via a disposer. See [here|https://github.com/uberfire/uberfire/pull/395#issuecomment-226521822] for suggestions.",
             "code_len": 41,
             "nl_len": 214,
-            "path": "errai-ioc/src/main/java/org/jboss/errai/ioc/client/IOCUtil.java",
-            "evaluation": "Common keywords: 'beans'"
+            "path": "errai-ioc/src/main/java/org/jboss/errai/ioc/client/IOCUtil.java"
         }
     ],
     "median": [
@@ -181,8 +174,7 @@
             "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
             "code_len": 102,
             "nl_len": 176,
-            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java",
-            "evaluation": "All of these are from the same issue, but it seems that 'Snappy' is a very recognisable keyword that makes this an easy case. Other common keywords: '(de)compress'"
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java"
         },
         {
             "prediction": 0.9681482911109924,
@@ -206,8 +198,7 @@
             "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
             "code_len": 57,
             "nl_len": 176,
-            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java",
-            "evaluation": "Common keywords: 'snappy', '(de)compress', 'library'"
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java"
         },
         {
             "prediction": 0.969407320022583,
@@ -215,8 +206,7 @@
             "nl_input": "Integrate Snappy compression\nGoogle release Zippy as an open source (APLv2) project called Snappy (http://code.google.com/p/snappy). This tracks integrating it into Hadoop.\n\n{quote}\nSnappy is a compression/decompression library. It does not aim for maximum compression, or compatibility with any other compression library; instead, it aims for very high speeds and reasonable compression. For instance, compared to the fastest mode of zlib, Snappy is an order of magnitude faster for most inputs, but the resulting compressed files are anywhere from 20% to 100% bigger. On a single core of a Core i7 processor in 64-bit mode, Snappy compresses at about 250 MB/sec or more and decompresses at about 500 MB/sec or more.\n{quote}",
             "code_len": 55,
             "nl_len": 176,
-            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java",
-            "evaluation": "Common keywords: 'snappy', '(de)compress', 'library'"
+            "path": "common/src/java/org/apache/hadoop/io/compress/SnappyCodec.java"
         }
     ]
 }

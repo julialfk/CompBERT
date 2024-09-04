@@ -6,8 +6,7 @@
             "nl_input": "sorted merge join\nIf the input tables are sorted on the join key, and a mapjoin is being performed, it is useful to exploit the sorted properties of the table.\nThis can lead to substantial cpu savings - this needs to work across bucketed map joins also.\n\nSince, sorted properties of a table are not enforced currently, a new parameter can be added to specify to use the sort-merge join.\n",
             "code_len": 48,
             "nl_len": 90,
-            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java",
-            "evaluation": "Again, same issue lowest scores as in positives. Maybe bias for this issue. Description does use more generic keywords that do not occur in methods."
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java"
         },
         {
             "prediction": 0.05342835187911987,
@@ -49,8 +48,7 @@
             "nl_input": "CopyableValue method to copy into new instance\nProvide a method for generic user-defined functions to clone a {{CopyableValue}}. A common use case is a {{GroupReduceFunction}} that needs to store multiple objects. With object reuse we need to make a deep copy and with type erasure we cannot call new.",
             "code_len": 69,
             "nl_len": 65,
-            "path": "flink-core/src/main/java/org/apache/flink/types/StringValue.java",
-            "evaluation": "No notable keywords."
+            "path": "flink-core/src/main/java/org/apache/flink/types/StringValue.java"
         },
         {
             "prediction": 0.2857496440410614,
@@ -58,8 +56,7 @@
             "nl_input": "Add support for not null and auto increment for temp table columns\nIt would be good to have auto increment and not null support for temp tables.",
             "code_len": 37,
             "nl_len": 29,
-            "path": "engine/src/main/java/org/teiid/query/sql/navigator/PreOrPostOrderNavigator.java",
-            "evaluation": "No notable keywords."
+            "path": "engine/src/main/java/org/teiid/query/sql/navigator/PreOrPostOrderNavigator.java"
         },
         {
             "prediction": 0.2857773005962372,
@@ -67,8 +64,7 @@
             "nl_input": "Support Lateral join and procedure pushdown\nLateral joins of the form:\n\nselect ... from x inner join lateral (... x.col ...) as y on ...\n\nHave been supported for some time, but not the ability to push them to source.\n\nA highly related scenario is to be able to push procedures used directly or in lateral joins with the rest of their plan:\n\nselect ... from x inner join lateral (call proc(.. x.col ...)) as y on ...",
             "code_len": 83,
             "nl_len": 109,
-            "path": "connectors/translator-jdbc/src/main/java/org/teiid/translator/jdbc/JDBCExecutionFactory.java",
-            "evaluation": "No notable keywords and both inputs have specific keywords."
+            "path": "connectors/translator-jdbc/src/main/java/org/teiid/translator/jdbc/JDBCExecutionFactory.java"
         },
         {
             "prediction": 0.28578534722328186,
@@ -76,8 +72,7 @@
             "nl_input": "Implement bitmap indexing in Hive\nImplement bitmap index handler to complement compact indexing.",
             "code_len": 70,
             "nl_len": 15,
-            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java",
-            "evaluation": "No notable keywords and both inputs have specific keywords."
+            "path": "common/src/java/org/apache/hadoop/hive/conf/HiveConf.java"
         },
         {
             "prediction": 0.2857973575592041,
@@ -85,8 +80,7 @@
             "nl_input": "Signal congestion on the DataNode\nThe DataNode should signal congestion (i.e. \"I'm too busy\") in the PipelineAck using the mechanism introduced in HDFS-7270.",
             "code_len": 96,
             "nl_len": 41,
-            "path": "hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/datanode/DataNode.java",
-            "evaluation": "No notable keywords and both inputs have specific keywords."
+            "path": "hadoop-hdfs-project/hadoop-hdfs/src/main/java/org/apache/hadoop/hdfs/server/datanode/DataNode.java"
         }
     ],
     "median": [
@@ -180,8 +174,7 @@
             "nl_input": "Virtual repositories or repository grouping\nA number of managed repositories can  be grouped together with that group having only one url. So you only need to specify that url in the settings.xml file and when Archiva receives a request via that url, it would look for that artifact from the repositories belonging to that group. \n\nMore details are dicussed here:\nhttp://www.nabble.com/Archiva-1.1-Roadmap-td15262645.html#a15263879",
             "code_len": 73,
             "nl_len": 111,
-            "path": "archiva-modules/archiva-web/archiva-webapp/src/main/java/org/apache/maven/archiva/web/action/admin/repositories/RepositoryGroupsAction.java",
-            "evaluation": "Common keywords: 'repository', 'group', 'archiva'"
+            "path": "archiva-modules/archiva-web/archiva-webapp/src/main/java/org/apache/maven/archiva/web/action/admin/repositories/RepositoryGroupsAction.java"
         },
         {
             "prediction": 0.9489997029304504,
@@ -189,8 +182,7 @@
             "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
             "code_len": 25,
             "nl_len": 211,
-            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java",
-            "evaluation":"Common keywords: 'statistics'. Short method. 'add' or 'accept' could be interpreted as part of the 'append' operation described."
+            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java"
         },
         {
             "prediction": 0.9506540894508362,
@@ -198,8 +190,7 @@
             "nl_input": "Add a new interface for retrieving FS and FC Statistics\nCurrently FileSystem.Statistics exposes the following statistics:\nBytesRead\nBytesWritten\nReadOps\nLargeReadOps\nWriteOps\n\nThese are in-turn exposed as job counters by MapReduce and other frameworks. There is logic within DfsClient to map operations to these counters that can be confusing, for instance, mkdirs counts as a writeOp.\n\nProposed enhancement:\nAdd a statistic for each DfsClient operation including create, append, createSymlink, delete, exists, mkdirs, rename and expose them as new properties on the Statistics object. The operation-specific counters can be used for analyzing the load imposed by a particular job on HDFS. \nFor example, we can use them to identify jobs that end up creating a large number of files.\n\nOnce this information is available in the Statistics object, the app frameworks like MapReduce can expose them as additional counters to be aggregated and recorded as part of job summary.",
             "code_len": 27,
             "nl_len": 211,
-            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java",
-            "evaluation":"Common keywords: 'statistics'. Short method. 'accept' could be interpreted as part of the 'append' operation described."
+            "path": "hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/FileSystem.java"
         },
         {
             "prediction": 0.9529407620429993,
@@ -207,8 +198,7 @@
             "nl_input": "Create a Hive CLI that connects to hive ThriftServer\nWe should have an alternate CLI that works by interacting with the HiveServer, in this way it will be ready when/if we deprecate the current CLI.",
             "code_len": 66,
             "nl_len": 46,
-            "path": "service/src/java/org/apache/hadoop/hive/service/HiveServer.java",
-            "evaluation":"Common keywords: 'Hive', 'thrift', 'server'"
+            "path": "service/src/java/org/apache/hadoop/hive/service/HiveServer.java"
         },
         {
             "prediction": 0.9577432870864868,
@@ -216,8 +206,7 @@
             "nl_input": "Add ability to monitor Connector Connection Pool \nHere are the discussed changes to enable connection pool monitoring:\n\n-   Create a new stat's class to expose the information: ConnectionPoolStats\n-   Enable the ConnectionPool to monitor the following pieces of information:\n\n\na.   Total Connections  - Total Number of Connections for the Connection Pool\nb   Available Connections  - Number of available connections in the connection pool.\nc   Active Connections - Number of Connections currently supporting clients.\nd   Connections Created - Number of Connections created since the Connection Pool was created.\ne  Connections Destroyed  -     Number of Connections destroyed since the Connection Pool was created. \n\nIn the config.xml for the base Connector component type\n\na.  Rename the ConnectorMaxThreads to MaxConnections so that it\nrelates better to the user\n\n\n\n\n-  Expose the ConnectionPoolStats out the adminAPI\n",
             "code_len": 233,
             "nl_len": 202,
-            "path": "client/src/main/java/com/metamatrix/admin/objects/MMConnectionPool.java",
-            "evaluation":"Common keywords: 'connection', 'pool', 'stat' (concatenation of these three occurs in both code and NL input), 'connection'. Keywords occur often in both inputs. In both inputs mention of total, creation, destroy, and in use/active connections. Method does look like a logger to monitor the connection pool. "
+            "path": "client/src/main/java/com/metamatrix/admin/objects/MMConnectionPool.java"
         }
     ]
 }
